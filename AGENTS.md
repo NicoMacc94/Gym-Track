@@ -34,3 +34,4 @@
 - Before starting any new feature/implementation, write a short project doc describing what you will build and how (scope, approach, key files).
 - Name the doc `docs/YYYY-MM-DD-nomeFunzione.md` using the current date (check system date/time before writing). Create `docs/` if missing.
 - Share the doc and wait for maintainer confirmation before coding.
+- After completing the implementation, update the same project doc with what was delivered (files touched, outcomes, tests run) before closing the task.
