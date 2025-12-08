@@ -1,0 +1,246 @@
+.page {
+  --background: #f5f7fb;
+  --card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #0ea5e9;
+  --border: rgba(15, 23, 42, 0.08);
+  --error: #b91c1c;
+  --success: #16a34a;
+
+  min-height: 100vh;
+  padding: 48px 16px 64px;
+  background: radial-gradient(circle at 12% 18%, #e0f2fe 0, transparent 22%),
+    radial-gradient(circle at 85% 0%, #f1f5f9 0, transparent 18%),
+    var(--background);
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  width: 100%;
+  max-width: 1080px;
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+  border: 1px solid var(--border);
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  font-family: var(--font-geist-sans);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.lead {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.legend {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.required {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.success {
+  border: 1px solid rgba(22, 163, 74, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(22, 163, 74, 0.08),
+    rgba(22, 163, 74, 0.02)
+  );
+  color: var(--text-primary);
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  background: #f8fafc;
+  color: var(--text-primary);
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: rgba(14, 165, 233, 0.6);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.buttonGroup {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+  gap: 8px;
+}
+
+.chipButton {
+  border: 1px solid var(--border);
+  background: #f8fafc;
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.chipButton:hover {
+  border-color: rgba(14, 165, 233, 0.6);
+  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.15);
+}
+
+.chipButton:active {
+  transform: translateY(1px);
+}
+
+.chipActive {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), #fff);
+  border-color: rgba(14, 165, 233, 0.8);
+  box-shadow: 0 8px 18px rgba(14, 165, 233, 0.2);
+}
+
+.sliderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slider {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+.sliderValue {
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.error {
+  font-size: 13px;
+  color: var(--error);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.primaryButton {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.primaryButton:hover {
+  background: #0284c7;
+  box-shadow: 0 12px 24px rgba(14, 165, 233, 0.25);
+}
+
+.primaryButton:active {
+  transform: translateY(1px);
+}
+
+.secondaryButton {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.secondaryButton:hover {
+  border-color: rgba(15, 23, 42, 0.16);
+  background: #f8fafc;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 32px 20px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+}

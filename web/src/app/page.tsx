@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -10,6 +11,14 @@ export default function Home() {
             Monitora i tuoi allenamenti e progressi in un unico posto, con una
             panoramica chiara delle tue sessioni.
           </p>
+          <div className={styles.ctaRow}>
+            <Link href="/allenamenti/nuovo" className={styles.primaryButton}>
+              Nuovo allenamento
+            </Link>
+            <p className={styles.helper}>
+              Vai direttamente al form per registrare una nuova sessione.
+            </p>
+          </div>
         </header>
 
         <section className={styles.placeholder}>
