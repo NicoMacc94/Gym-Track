@@ -73,6 +73,7 @@
     -   Note sui test eseguiti (`npm run lint`, verifica su dev server).
     -   Eventuali screenshot per modifiche di UI.
     -   Linkare issue collegate, quando esistono.
+-   Prima di inviare il risultato finale all’utente, assicurarsi di aver già committato e pushato tutte le modifiche richieste.
 -   Una volta implementata, modificata o eliminata una funzione:
     -   Effettua un commit che includa quella funzione e **tutti** i file toccati, e relativa push alla repob v.
 
@@ -91,6 +92,8 @@
 -   Dopo aver completato qualsiasi implementazione:
     -   Aggiorna lo **stesso** documento aggiungendo una sezione “Implementation”:
         -   Elenca come è stato implementato (file creati/modificati, comportamento atteso, test eseguiti e come riprodurli).
+-   **Responsabilità degli agenti**:
+    -   Gli agenti sono responsabili di creare/aggiornare il relativo doc in `docs/` per ogni feature o modifica su cui lavorano, prima di considerare il task concluso.
 -   **Responsabilità degli agenti**:
     -   Gli agenti sono responsabili di creare/aggiornare il relativo doc in `docs/` per ogni feature o modifica su cui lavorano, prima di considerare il task concluso.
 
@@ -125,7 +128,7 @@
 
 ## Agents
 
-### `frontend-ux`
+## Agent: FRONTEND-UX
 
 **Role / Description**
 
