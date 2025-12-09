@@ -34,4 +34,5 @@
   - Storico tenta `GET /api/logs` con fallback ai dati mock, mostra banner di stato.
 - TODO-DB già popolati per auth, provider prod, connessioni/pooling, audit/logging.
 - Backend-only aggiunto: campo `scheduledDate` sui giorni e campo `note` sugli esercizi; UI front per note da implementare in un passaggio successivo (da tracciare nei TODO se necessario).
+- Seed: `node scripts/seed-plan.js` importa `data/PALE-4-scheda-fase-3-p-min-esp.json`, normalizzando i pesi ai soli numeri (es. “10 kg per lato” → `10`, “10/7.5/5 kg” → `10/7.5/5`), con note ed esercizi distribuiti su giorni/settimane; creati week entries e log base.
 - Test eseguiti: `cd web && npm run lint`.
