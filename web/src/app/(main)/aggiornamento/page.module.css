@@ -32,6 +32,26 @@
   max-width: 760px;
 }
 
+.banner {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #ecfeff;
+  color: #0f172a;
+  border: 1px solid #bae6fd;
+  font-size: 14px;
+}
+
+.errorBanner {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecdd3;
+  font-size: 14px;
+}
+
 .cardList {
   display: flex;
   flex-direction: column;

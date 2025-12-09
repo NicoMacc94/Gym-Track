@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./page.module.css";
 
 type WorkoutEntry = {
@@ -39,7 +39,25 @@ type SortKey =
 type SortDirection = "asc" | "desc";
 type SortConfig = { key: SortKey; direction: SortDirection };
 
-const workoutEntries: WorkoutEntry[] = [
+type ApiLog = {
+  id: string;
+  planId?: string;
+  planDayId?: string;
+  planExerciseId?: string;
+  weekNumber?: number;
+  dayNumber?: number;
+  date?: string;
+  setNumber?: number;
+  reps?: string | number;
+  weight?: string | number;
+  rpe?: string | number;
+  note?: string;
+  esercizio?: string;
+  exerciseName?: string;
+  scheda?: string;
+};
+
+const mockWorkoutEntries: WorkoutEntry[] = [
   {
     scheda: "Forza A",
     settimana: 1,
@@ -178,10 +196,6 @@ const defaultFilters: Filters = {
   rpeMin: "",
 };
 
-const schedaOptions = Array.from(new Set(workoutEntries.map((entry) => entry.scheda))).sort(
-  (a, b) => a.localeCompare(b),
-);
-
 const formatDate = (value: string) =>
   new Intl.DateTimeFormat("it-IT", {
     day: "2-digit",
@@ -250,15 +264,73 @@ const sortEntries = (entries: WorkoutEntry[], sort: SortConfig) => {
 };
 
 export default function StoricoPage() {
+  const [entries, setEntries] = useState<WorkoutEntry[]>(mockWorkoutEntries);
+  const [loading, setLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [filters, setFilters] = useState<Filters>({ ...defaultFilters });
   const [sortConfig, setSortConfig] = useState<SortConfig>({
     key: "data",
     direction: "desc",
   });
 
+  useEffect(() => {
+    const fetchLogs = async () => {
+      setLoading(true);
+      setStatusMessage(null);
+      try {
+        const response = await fetch("/api/logs", {
+          headers: { "x-user-id": "dev-user" },
+        });
+        if (!response.ok) {
+          throw new Error("Impossibile recuperare i log dal backend");
+        }
+        const payload = await response.json();
+        const apiLogs = Array.isArray(payload.logs) ? payload.logs : [];
+        if (apiLogs.length === 0) {
+          setEntries(mockWorkoutEntries);
+          setStatusMessage("Nessun log trovato nel backend, uso il mock locale.");
+          return;
+        }
+        const mapped: WorkoutEntry[] = apiLogs.map((log: ApiLog) => {
+          const parsedWeight = log.weight !== undefined ? Number.parseFloat(log.weight) : undefined;
+          const weight = Number.isFinite(parsedWeight) ? parsedWeight : undefined;
+          const parsedRpe = log.rpe !== undefined ? Number.parseFloat(log.rpe) : undefined;
+          const rpe = Number.isFinite(parsedRpe) ? parsedRpe : undefined;
+          const date = log.date ?? log.data ?? "";
+          return {
+            scheda: log.planId ?? log.scheda ?? "Scheda",
+            settimana: Number(log.weekNumber ?? 1),
+            giorno: Number(log.dayNumber ?? 1),
+            data: date,
+            esercizio: log.exerciseName ?? log.esercizio ?? "Esercizio",
+            serie: Number(log.setNumber ?? 1),
+            ripetizioni: Number(log.reps ?? 0),
+            peso: weight,
+            rpe,
+            note: log.note,
+          };
+        });
+        setEntries(mapped);
+      } catch (error) {
+        console.error("Errore caricamento log", error);
+        setEntries(mockWorkoutEntries);
+        setStatusMessage("Backend non raggiungibile, uso il mock locale.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLogs();
+  }, []);
+
+  const schedaOptions = useMemo(
+    () => Array.from(new Set(entries.map((entry) => entry.scheda))).sort((a, b) => a.localeCompare(b)),
+    [entries],
+  );
+
   const filteredEntries = useMemo(
-    () => filterEntries(workoutEntries, filters),
-    [filters],
+    () => filterEntries(entries, filters),
+    [entries, filters],
   );
 
   const sortedEntries = useMemo(
@@ -308,15 +380,17 @@ export default function StoricoPage() {
             Filtri, ricerca e ordinamento sono pronti per espansioni future.
           </p>
           <p className={styles.meta}>
-            Dati mostrati da un dataset locale finché non arriva la persistenza. Ogni
-            riga replica il payload validato (scheda, settimana, giorno, esercizio,
-            serie, ripetizioni, peso, RPE, note).
+            I dati vengono letti dal backend se disponibile; in caso contrario si usa un
+            dataset mock locale. Ogni riga replica il payload validato (scheda, settimana,
+            giorno, esercizio, serie, ripetizioni, peso, RPE, note).
           </p>
+          {loading && <div className={styles.info}>Caricamento log...</div>}
+          {!loading && statusMessage && <div className={styles.info}>{statusMessage}</div>}
         </div>
         <div className={styles.stats}>
           <div className={styles.statCard}>
             <p className={styles.statLabel}>Log totali</p>
-            <p className={styles.statValue}>{workoutEntries.length}</p>
+            <p className={styles.statValue}>{entries.length}</p>
           </div>
           <div className={styles.statCard}>
             <p className={styles.statLabel}>Visibili ora</p>
@@ -486,7 +560,7 @@ export default function StoricoPage() {
 
           <div className={styles.summaryRow}>
             <p className={styles.summary}>
-              Mostro {sortedEntries.length} di {workoutEntries.length} log
+              Mostro {sortedEntries.length} di {entries.length} log
               {activeFilters > 0 ? ` (filtri attivi: ${activeFilters})` : " (nessun filtro)"}
             </p>
           </div>

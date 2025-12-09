@@ -321,39 +321,107 @@ const initialPlans: TrainingPlan[] = [
 const getTotalExercises = (plan: TrainingPlan) =>
   plan.days.reduce((count, day) => count + day.exercises.length, 0);
 
-const STORAGE_KEY = "aggiornamento-plans-v2";
-
 export default function AggiornamentoPage() {
   const [plans, setPlans] = useState<TrainingPlan[]>(initialPlans);
-  const [openPlanId, setOpenPlanId] = useState<string | null>(initialPlans[0]?.id ?? null);
+  const [openPlanId, setOpenPlanId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  // Hydrate from localStorage so valori inseriti restano tra navigazioni locali.
-  // Se il dato non è presente, si usano i mock di default.
-  // Esplicita: preferiamo persistenza locale finché non arriva il vero DB.
+  const normalizePlan = (plan: TrainingPlan): TrainingPlan => {
+    return {
+      ...plan,
+      days: plan.days.map((day) => ({
+        ...day,
+        exercises: day.exercises.map((exercise) => {
+          const filledWeeks =
+            exercise.weeks.length >= plan.weeks
+              ? exercise.weeks
+              : [
+                  ...exercise.weeks,
+                  ...Array.from(
+                    { length: plan.weeks - exercise.weeks.length },
+                    (_, idx) => ({
+                      weekNumber: exercise.weeks.length + idx + 1,
+                      reps: "",
+                      weight: "",
+                    }),
+                  ),
+                ];
+          return { ...exercise, weeks: filledWeeks };
+        }),
+      })),
+    };
+  };
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (!stored) return;
-    try {
-      const parsed = JSON.parse(stored) as TrainingPlan[];
-      if (Array.isArray(parsed) && parsed.length > 0) {
-        // Intentional: hydrating dallo storage deve avvenire post-mount (no accesso a localStorage in render).
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setPlans(parsed);
-        setOpenPlanId((current) => (current && parsed.some((p) => p.id === current) ? current : parsed[0]?.id ?? null));
+    const fetchPlans = async () => {
+      setLoading(true);
+      setStatusMessage(null);
+      try {
+        const response = await fetch("/api/plans", {
+          headers: {
+            "x-user-id": "dev-user",
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Impossibile caricare le schede dal backend");
+        }
+        const payload = await response.json();
+        const apiPlans = Array.isArray(payload.plans) ? payload.plans : [];
+        if (apiPlans.length === 0) {
+          setPlans(initialPlans);
+          setOpenPlanId(initialPlans[0]?.id ?? null);
+          setStatusMessage("Nessuna scheda trovata nel backend, uso il mock locale.");
+          return;
+        }
+        const normalized = apiPlans.map(normalizePlan);
+        setPlans(normalized);
+        setOpenPlanId(normalized[0]?.id ?? null);
+      } catch (error) {
+        console.error("Errore caricamento schede", error);
+        setPlans(initialPlans);
+        setOpenPlanId(initialPlans[0]?.id ?? null);
+        setStatusMessage("Backend non raggiungibile, uso il mock locale.");
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      // ignore malformed storage
-    }
-  }, []);
+    };
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(plans));
-  }, [plans]);
+    fetchPlans();
+  }, []);
 
   const togglePlan = (planId: string) => {
     setOpenPlanId((current) => (current === planId ? null : planId));
+  };
+
+  const persistWeekValue = async (
+    planId: string,
+    exerciseId: string,
+    weekNumber: number,
+    data: Partial<WeekValues>,
+  ) => {
+    try {
+      const response = await fetch(
+        `/api/plans/${planId}/exercises/${exerciseId}/weeks/${weekNumber}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": "dev-user",
+          },
+          body: JSON.stringify({
+            reps: data.reps ?? "",
+            weight: data.weight ?? "",
+          }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error("Errore salvataggio settimana");
+      }
+    } catch (error) {
+      console.error("Persist week value error", error);
+      setStatusMessage("Salvataggio non riuscito (week). Controlla la connessione al backend.");
+    }
   };
 
   const updateWeekValue = (
@@ -388,6 +456,7 @@ export default function AggiornamentoPage() {
         };
       }),
     );
+    void persistWeekValue(planId, exerciseId, weekIndex + 1, { [field]: value });
   };
 
   const updateDayLabel = (planId: string, dayId: string, label: string) => {
@@ -407,6 +476,24 @@ export default function AggiornamentoPage() {
         };
       }),
     );
+    void (async () => {
+      try {
+        const response = await fetch(`/api/plans/${planId}/days/${dayId}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": "dev-user",
+          },
+          body: JSON.stringify({ label }),
+        });
+        if (!response.ok) {
+          throw new Error("Errore salvataggio giorno");
+        }
+      } catch (error) {
+        console.error("Persist day label error", error);
+        setStatusMessage("Salvataggio non riuscito (giorno). Controlla la connessione al backend.");
+      }
+    })();
   };
 
   return (
@@ -419,6 +506,8 @@ export default function AggiornamentoPage() {
           Compila ripetizioni e peso dove mancano o aggiorna i valori esistenti per tenere
           traccia dei carichi.
         </p>
+        {loading && <div className={styles.banner}>Caricamento schede...</div>}
+        {!loading && statusMessage && <div className={styles.banner}>{statusMessage}</div>}
       </header>
 
       <div className={styles.cardList}>

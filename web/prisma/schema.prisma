@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String?  @unique
+  displayName  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  plans        Plan[]
+}
+
+model Plan {
+  id          String      @id @default(cuid())
+  userId      String
+  name        String
+  weeksCount  Int
+  description String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  days      PlanDay[]
+  logs      WorkoutLog[]
+}
+
+model PlanDay {
+  id         String    @id @default(cuid())
+  planId     String
+  orderIndex Int
+  label      String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  plan       Plan        @relation(fields: [planId], references: [id], onDelete: Cascade)
+  exercises  PlanExercise[]
+}
+
+model PlanExercise {
+  id         String    @id @default(cuid())
+  planDayId  String
+  name       String
+  targetSets String
+  targetReps String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  day          PlanDay           @relation(fields: [planDayId], references: [id], onDelete: Cascade)
+  weekTargets  PlanWeekTarget[]
+  weekEntries  PlanWeekEntry[]
+  workoutLogs  WorkoutLog[]
+}
+
+model PlanWeekTarget {
+  id             String   @id @default(cuid())
+  planExerciseId String
+  weekNumber     Int
+  targetReps     String?
+  targetWeight   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  exercise PlanExercise @relation(fields: [planExerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([planExerciseId, weekNumber])
+}
+
+model PlanWeekEntry {
+  id             String   @id @default(cuid())
+  planExerciseId String
+  weekNumber     Int
+  actualReps     String?
+  actualWeight   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  exercise PlanExercise @relation(fields: [planExerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([planExerciseId, weekNumber])
+}
+
+model WorkoutLog {
+  id             String    @id @default(cuid())
+  userId         String
+  planId         String
+  planDayId      String
+  planExerciseId String
+  weekNumber     Int
+  dayNumber      Int
+  date           DateTime
+  setNumber      Int
+  reps           String
+  weight         String?
+  rpe            String?
+  note           String?   @db.Text
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  user     User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan     Plan         @relation(fields: [planId], references: [id], onDelete: Cascade)
+  day      PlanDay      @relation(fields: [planDayId], references: [id], onDelete: Cascade)
+  exercise PlanExercise @relation(fields: [planExerciseId], references: [id], onDelete: Cascade)
+
+  @@index([planId, weekNumber, dayNumber, date])
+}

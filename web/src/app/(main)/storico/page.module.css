@@ -56,6 +56,17 @@
   max-width: 860px;
 }
 
+.info {
+  color: #0f172a;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #ecfeff;
+  border: 1px solid #bae6fd;
+  border-radius: 12px;
+  padding: 10px 12px;
+  max-width: 860px;
+}
+
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

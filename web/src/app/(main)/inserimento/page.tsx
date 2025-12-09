@@ -57,10 +57,11 @@ export default function NewPlanPage() {
   });
   const [days, setDays] = useState<DayPlan[]>(() => [createInitialDay()]);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitStatus, setSubmitStatus] = useState<"idle" | "success">("idle");
+  const [submitStatus, setSubmitStatus] = useState<"idle" | "loading" | "success" | "error">(
+    "idle",
+  );
+  const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-
-  const totalExercises = days.reduce((sum, day) => sum + day.exercises.length, 0);
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSchedule((prev) => ({ ...prev, name: event.target.value }));
@@ -180,28 +181,53 @@ export default function NewPlanPage() {
     setSubmitStatus("idle");
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!schedule.name.trim()) {
       setErrors({ name: "Nome scheda obbligatorio" });
       return;
     }
 
+    setSubmitStatus("loading");
+    setSubmitMessage(null);
+
     const payload = {
-      scheda: schedule.name.trim(),
-      settimane: schedule.weeks,
-      giorni: days.map((day, index) => ({
-        giorno: index + 1,
-        esercizi: day.exercises.map((exercise) => ({
-          nome: exercise.name.trim(),
-          serie: exercise.sets.trim(),
-          ripetizioni: exercise.reps.trim(),
+      name: schedule.name.trim(),
+      weeksCount: schedule.weeks,
+      days: days.map((day, index) => ({
+        label: `Giorno ${index + 1}`,
+        orderIndex: index,
+        exercises: day.exercises.map((exercise) => ({
+          name: exercise.name.trim(),
+          targetSets: exercise.sets.trim(),
+          targetReps: exercise.reps.trim(),
         })),
       })),
     };
 
-    console.log("Nuova scheda impostata", payload);
-    setSubmitStatus("success");
+    try {
+      const response = await fetch("/api/plans", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": "dev-user",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.json().catch(() => ({}));
+        throw new Error(errorBody.error || "Impossibile salvare la scheda");
+      }
+
+      const data = await response.json();
+      setSubmitStatus("success");
+      setSubmitMessage(`Scheda salvata: ${data.plan?.name ?? "creata"}.`);
+    } catch (error) {
+      console.error("Errore salvataggio scheda", error);
+      setSubmitStatus("error");
+      setSubmitMessage("Salvataggio non riuscito. Controlla la connessione al backend.");
+    }
   };
 
   const activeDay = days[selectedDayIndex];
@@ -221,9 +247,12 @@ export default function NewPlanPage() {
 
         {submitStatus === "success" && (
           <div className={styles.success} role="status" aria-live="polite">
-            Scheda salvata in locale: {days.length}{" "}
-            {days.length === 1 ? "giorno" : "giorni"},{" "}
-            {totalExercises} esercizi totali. I dati sono visibili in console per ora.
+            {submitMessage ?? "Scheda salvata."}
+          </div>
+        )}
+        {submitStatus === "error" && submitMessage && (
+          <div className={styles.errorBanner} role="alert">
+            {submitMessage}
           </div>
         )}
 
