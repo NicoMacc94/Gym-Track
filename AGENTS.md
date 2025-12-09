@@ -9,6 +9,7 @@
 -   Root files come `istruzioni.txt` devono restare intatti.
 -   Nessun backend o layer DB condiviso per ora.
 -   Alias `@/*` risolve a `web/src/` per gli import di codice (non per gli agenti). Usa `#nome-agente` per riferirti a un agente nei testi.
+-   Prima di agire su un prompt, valuta se è necessario attivare un agente specifico (`#nome-agente`) o procedere senza agente.
 
 ## Build, Test, and Development Commands
 
