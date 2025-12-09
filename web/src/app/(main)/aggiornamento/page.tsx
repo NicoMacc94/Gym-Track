@@ -20,6 +20,8 @@ type DayPlan = {
   id: string;
   label: string;
   scheduledDate?: string;
+  weekNumber?: number;
+  displayDay?: number;
   exercises: ExercisePlan[];
 };
 
@@ -330,6 +332,8 @@ const getTotalExercises = (plan: TrainingPlan) =>
 
 export default function AggiornamentoPage() {
   const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
+  const [daysPerWeek, setDaysPerWeek] = useState(5);
+  const [rawPlans, setRawPlans] = useState<TrainingPlan[]>(initialPlans);
   const [plans, setPlans] = useState<TrainingPlan[]>(initialPlans);
   const [openPlanId, setOpenPlanId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -378,17 +382,17 @@ export default function AggiornamentoPage() {
         const payload = await response.json();
         const apiPlans = Array.isArray(payload.plans) ? payload.plans : [];
         if (apiPlans.length === 0) {
-          setPlans(initialPlans);
-          setOpenPlanId(initialPlans[0]?.id ?? null);
+          setRawPlans(initialPlans);
           setStatusMessage("Nessuna scheda trovata nel backend, uso il mock locale.");
-          return;
+          setOpenPlanId(initialPlans[0]?.id ?? null);
+        } else {
+          const normalized = apiPlans.map(normalizePlan);
+          setRawPlans(normalized);
+          setOpenPlanId(normalized[0]?.id ?? null);
         }
-        const normalized = apiPlans.map(normalizePlan);
-        setPlans(normalized);
-        setOpenPlanId(normalized[0]?.id ?? null);
       } catch (error) {
         console.error("Errore caricamento schede", error);
-        setPlans(initialPlans);
+        setRawPlans(initialPlans);
         setOpenPlanId(initialPlans[0]?.id ?? null);
         setStatusMessage("Backend non raggiungibile, uso il mock locale.");
       } finally {
@@ -398,6 +402,26 @@ export default function AggiornamentoPage() {
 
     fetchPlans();
   }, [defaultUserId]);
+
+  useEffect(() => {
+    const annotate = (plan: TrainingPlan): TrainingPlan => {
+      const weekDayCount = new Map<number, number>();
+      return {
+        ...plan,
+        days: plan.days.map((day, idx) => {
+          const entryWeek =
+            day.exercises[0]?.weeks?.find((w) => w.weekNumber)?.weekNumber ??
+            Math.floor(idx / daysPerWeek) + 1;
+          const count = weekDayCount.get(entryWeek) ?? 0;
+          const displayDay = (count % daysPerWeek) + 1;
+          weekDayCount.set(entryWeek, count + 1);
+          return { ...day, weekNumber: entryWeek, displayDay };
+        }),
+      };
+    };
+
+    setPlans(rawPlans.map(annotate));
+  }, [rawPlans, daysPerWeek]);
 
   const togglePlan = (planId: string) => {
     setOpenPlanId((current) => (current === planId ? null : planId));
@@ -516,6 +540,23 @@ export default function AggiornamentoPage() {
           Compila ripetizioni e peso dove mancano o aggiorna i valori esistenti per tenere
           traccia dei carichi.
         </p>
+        <div className={styles.daysPerWeek}>
+          <label className={styles.daysPerWeekLabel} htmlFor="daysPerWeek">
+            Giorni per settimana (usato per raggruppare la vista)
+          </label>
+          <input
+            id="daysPerWeek"
+            type="number"
+            min={1}
+            max={7}
+            value={daysPerWeek}
+            onChange={(event) => {
+              const value = Number(event.target.value);
+              setDaysPerWeek(Math.min(7, Math.max(1, value || 1)));
+            }}
+            className={styles.daysPerWeekInput}
+          />
+        </div>
         {loading && <div className={styles.banner}>Caricamento schede...</div>}
         {!loading && statusMessage && <div className={styles.banner}>{statusMessage}</div>}
       </header>
@@ -555,7 +596,10 @@ export default function AggiornamentoPage() {
                     <section key={day.id} className={styles.daySection}>
                       <div className={styles.dayHeader}>
                         <div className={styles.dayHeading}>
-                          <p className={styles.dayEyebrow}>Giorno {dayIndex + 1}</p>
+                          <p className={styles.dayEyebrow}>
+                            Sett {day.weekNumber ?? Math.floor(dayIndex / daysPerWeek) + 1} ·
+                            Giorno {day.displayDay ?? dayIndex + 1}
+                          </p>
                           <div className={styles.dayTitleRow}>
                             <h3 className={styles.dayTitle}>Nome giorno</h3>
                             <div className={styles.dayInputs}>

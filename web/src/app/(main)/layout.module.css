@@ -4,22 +4,22 @@
     radial-gradient(circle at 84% 4%, #e5e7eb 0, transparent 22%),
     #f6f8fc;
   padding-left: 304px;
-  padding-right: 12px;
+  padding-right: 24px;
   padding-top: 20px;
 }
 
 .main {
   min-height: 100vh;
-  padding: 0 16px 48px;
+  padding: 0 24px 60px;
   color: #0f172a;
 }
 
 .mainInner {
   width: 100%;
-  max-width: min(1120px, calc(100vw - 340px));
+  max-width: min(1280px, calc(100vw - 360px));
   margin: 0 auto;
   background: transparent;
-  padding: 36px 36px 0;
+  padding: 40px 40px 0;
 }
 
 @media (max-width: 960px) {
@@ -29,6 +29,6 @@
 
   .mainInner {
     max-width: 100%;
-    padding: 0 16px;
+    padding: 0 18px;
   }
 }

@@ -234,6 +234,7 @@
   border-radius: 10px;
   padding: 8px 12px;
   font-weight: 700;
+  color: #0f172a;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.16s ease;
 }
