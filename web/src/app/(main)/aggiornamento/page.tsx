@@ -19,6 +19,7 @@ type ExercisePlan = {
 type DayPlan = {
   id: string;
   label: string;
+  scheduledDate?: string;
   exercises: ExercisePlan[];
 };
 
@@ -40,6 +41,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-1-day-1",
         label: "Lower + Spinta",
+        scheduledDate: "2025-12-10",
         exercises: [
           {
             id: "squat",
@@ -93,6 +95,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-1-day-2",
         label: "Upper",
+        scheduledDate: "2025-12-12",
         exercises: [
           {
             id: "ohp",
@@ -147,6 +150,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-1-day-3",
         label: "Lower + Catena posteriore",
+        scheduledDate: "2025-12-15",
         exercises: [
           {
             id: "rdl",
@@ -209,6 +213,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-2-day-1",
         label: "Upper A",
+        scheduledDate: "2025-12-11",
         exercises: [
           {
             id: "incline",
@@ -245,6 +250,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-2-day-2",
         label: "Lower A",
+        scheduledDate: "2025-12-13",
         exercises: [
           {
             id: "legpress",
@@ -281,6 +287,7 @@ const initialPlans: TrainingPlan[] = [
       {
         id: "plan-2-day-3",
         label: "Upper B",
+        scheduledDate: "2025-12-16",
         exercises: [
           {
             id: "row-machine",
@@ -332,6 +339,7 @@ export default function AggiornamentoPage() {
       ...plan,
       days: plan.days.map((day) => ({
         ...day,
+        scheduledDate: day.scheduledDate ?? "",
         exercises: day.exercises.map((exercise) => {
           const filledWeeks =
             exercise.weeks.length >= plan.weeks
@@ -459,7 +467,7 @@ export default function AggiornamentoPage() {
     void persistWeekValue(planId, exerciseId, weekIndex + 1, { [field]: value });
   };
 
-  const updateDayLabel = (planId: string, dayId: string, label: string) => {
+  const updateDayLabel = (planId: string, dayId: string, label: string, scheduledDate?: string) => {
     setPlans((prev) =>
       prev.map((plan) => {
         if (plan.id !== planId) return plan;
@@ -470,6 +478,7 @@ export default function AggiornamentoPage() {
               ? {
                   ...day,
                   label,
+                  scheduledDate,
                 }
               : day,
           ),
@@ -484,7 +493,7 @@ export default function AggiornamentoPage() {
             "Content-Type": "application/json",
             "x-user-id": "dev-user",
           },
-          body: JSON.stringify({ label }),
+          body: JSON.stringify({ label, scheduledDate }),
         });
         if (!response.ok) {
           throw new Error("Errore salvataggio giorno");
@@ -548,15 +557,26 @@ export default function AggiornamentoPage() {
                           <p className={styles.dayEyebrow}>Giorno {dayIndex + 1}</p>
                           <div className={styles.dayTitleRow}>
                             <h3 className={styles.dayTitle}>Nome giorno</h3>
-                            <input
-                              type="text"
-                              value={day.label}
-                              onChange={(event) =>
-                                updateDayLabel(plan.id, day.id, event.target.value)
-                              }
-                              placeholder="Es. Upper/Lower"
-                              className={styles.dayNameInput}
-                            />
+                            <div className={styles.dayInputs}>
+                              <input
+                                type="text"
+                                value={day.label}
+                                onChange={(event) =>
+                                  updateDayLabel(plan.id, day.id, event.target.value, day.scheduledDate)
+                                }
+                                placeholder="Es. Upper/Lower"
+                                className={styles.dayNameInput}
+                              />
+                              <input
+                                type="date"
+                                value={day.scheduledDate ?? ""}
+                                onChange={(event) =>
+                                  updateDayLabel(plan.id, day.id, day.label, event.target.value)
+                                }
+                                className={styles.dayDateInput}
+                                aria-label="Data allenamento"
+                              />
+                            </div>
                           </div>
                         </div>
                         <span className={styles.dayBadge}>

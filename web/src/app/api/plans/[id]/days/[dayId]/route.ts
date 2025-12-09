@@ -6,6 +6,7 @@ import { getUserId } from "@/lib/current-user";
 const payloadSchema = z.object({
   label: z.string().min(1),
   orderIndex: z.number().int().min(0).optional(),
+  scheduledDate: z.string().optional(),
 });
 
 export async function PATCH(
@@ -45,11 +46,17 @@ export async function PATCH(
       data: {
         label: parsed.data.label,
         orderIndex: parsed.data.orderIndex ?? day.orderIndex,
+        scheduledDate: parsed.data.scheduledDate ? new Date(parsed.data.scheduledDate) : day.scheduledDate,
       },
     });
 
     return NextResponse.json({
-      day: { id: updated.id, label: updated.label, orderIndex: updated.orderIndex },
+      day: {
+        id: updated.id,
+        label: updated.label,
+        orderIndex: updated.orderIndex,
+        scheduledDate: updated.scheduledDate,
+      },
     });
   } catch (error) {
     console.error("PATCH /plans/:id/days/:dayId error", error);

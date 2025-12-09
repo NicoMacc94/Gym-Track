@@ -14,6 +14,7 @@ const dayInputSchema = z.object({
   label: z.string().optional(),
   orderIndex: z.number().int().min(0).optional(),
   exercises: z.array(exerciseInputSchema).min(1),
+  scheduledDate: z.string().optional(),
 });
 
 const planInputSchema = z.object({
@@ -51,6 +52,7 @@ export const serializePlan = (plan: PlanWithRelations) => ({
       id: day.id,
       label: day.label,
       orderIndex: day.orderIndex,
+      scheduledDate: day.scheduledDate,
       exercises: day.exercises.map((ex) => ({
         id: ex.id,
         name: ex.name,
@@ -137,6 +139,7 @@ export async function POST(request: NextRequest) {
           create: data.days.map((day, index) => ({
             label: day.label && day.label.trim().length > 0 ? day.label : `Giorno ${index + 1}`,
             orderIndex: day.orderIndex ?? index,
+            scheduledDate: day.scheduledDate ? new Date(day.scheduledDate) : null,
             exercises: {
               create: day.exercises.map((ex) => ({
                 name: ex.name,
