@@ -14,6 +14,7 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   plans        Plan[]
+  workoutLogs  WorkoutLog[]
 }
 
 model Plan {
@@ -43,6 +44,7 @@ model PlanDay {
 
   plan       Plan        @relation(fields: [planId], references: [id], onDelete: Cascade)
   exercises  PlanExercise[]
+  workoutLogs WorkoutLog[]
 }
 
 model PlanExercise {
