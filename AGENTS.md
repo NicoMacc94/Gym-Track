@@ -32,6 +32,7 @@
     -   Preferire l’alias `@/*` per i moduli locali, mantenendo la profondità relativa bassa.
 -   Linting:
     -   Seguire `eslint-config-next` e risolvere tutti i warning/error prima di committare.
+-   Ogni prompt va valutato sia per la parte frontend sia backend: se implementi una nuova funzionalità e/o modifichi una funzionalità esistente, considera entrambe le parti senza richiedere conferme aggiuntive.
 
 ## Testing Guidelines
 

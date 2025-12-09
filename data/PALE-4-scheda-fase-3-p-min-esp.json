@@ -1,0 +1,385 @@
+{
+  "planName": "PALE 4 (scheda fase 3 P min esp)",
+  "weeks": [
+    {
+      "weekNumber": 1,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Martedì",
+          "date": "2025-01-21",
+          "exercises": [
+            { "name": "Panca Piana", "sets": 5, "reps": "8", "weight": "7.5 kg per lato" },
+            { "name": "Spinte con manubri", "sets": 3, "reps": "10", "weight": "12.5 kg" },
+            { "name": "Rematore bilanciere", "sets": 3, "reps": "12", "weight": "5 kg per lato" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "8+", "weight": "10/7.5/5 kg per lato" },
+            { "name": "Stacco", "sets": 4, "reps": "8", "weight": "5 kg per lato", "note": "tecnico" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Mercoledì",
+          "date": "2025-01-22",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "8", "weight": "10 kg per lato" },
+            { "name": "Sagomato", "sets": 3, "reps": "10", "weight": "3 kg per lato" },
+            { "name": "Upper al super row", "sets": 3, "reps": "12", "weight": "10 kg per lato" },
+            { "name": "Push down", "sets": 3, "reps": "10", "weight": "12/10/5 kg" },
+            {
+              "name": "Bulgari",
+              "sets": null,
+              "reps": null,
+              "weight": "7.5 kg per man",
+              "note": "serie/ripetizioni non specificate"
+            }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Venerdì",
+          "date": "2025-01-24",
+          "exercises": [
+            { "name": "Rematore", "sets": 5, "reps": "8", "weight": "7 kg per lato" },
+            { "name": "Dip", "sets": null, "reps": "5", "weight": "", "note": "serie non specificate" },
+            { "name": "Low row", "sets": 3, "reps": "10", "weight": "15 kg per lato" },
+            { "name": "Croci", "sets": 3, "reps": "8", "weight": "20/15/10 kg" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Sabato",
+          "date": "2025-01-25",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "8", "weight": "15 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "5 kg per lato" },
+            { "name": "French press", "sets": 3, "reps": "10", "weight": "5 kg per lato" },
+            { "name": "Laterali", "sets": 3, "reps": "10", "weight": "7.5 kg per man" },
+            { "name": "Bici", "sets": 3, "reps": "8", "weight": "10/7.5/5 kg" }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "label": "Venerdì",
+          "date": "2025-01-31",
+          "exercises": [
+            { "name": "Military Press", "sets": 8, "reps": "5", "weight": "5 kg per lato" },
+            { "name": "Lento", "sets": 3, "reps": "10", "weight": "10 kg per lato" },
+            { "name": "Lat machine", "sets": 3, "reps": "8", "weight": "35/30/25 kg" }
+          ],
+          "dayNotes": ["Peso finale: 94 kg"]
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Sabato",
+          "date": "2025-02-01",
+          "exercises": [
+            { "name": "Panca", "sets": 5, "reps": "7", "weight": "12.5 kg per lato" },
+            { "name": "Spinte", "sets": 3, "reps": "10", "weight": "12.5 kg per lato" },
+            { "name": "T bar", "sets": 3, "reps": "12", "weight": "20 kg" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "8", "weight": "10/7.5/5 kg per lato" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Venerdì",
+          "date": "2025-02-07",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "7", "weight": "20 kg per lato" },
+            { "name": "Sagomato", "sets": 3, "reps": "12", "weight": "5 kg per lato" },
+            { "name": "Iperextension con manubri alla panca", "sets": 3, "reps": "12", "weight": "5 kg per lato" },
+            { "name": "Push", "sets": 3, "reps": "8", "weight": "12/10/7 kg" },
+            { "name": "Bulgari", "sets": 3, "reps": "10", "weight": "10 kg per lato" }
+          ],
+          "dayNotes": ["Peso finale: 93.8 kg"]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Martedì",
+          "date": "2025-02-11",
+          "exercises": [
+            { "name": "Rematore", "sets": 5, "reps": "7", "weight": "10 kg per lato" },
+            { "name": "Low row", "sets": 3, "reps": "10", "weight": "17 kg per lato" },
+            {
+              "name": "Dio",
+              "sets": 3,
+              "reps": "10",
+              "weight": "elastico nero/viola",
+              "note": "esercizio con elastico"
+            },
+            { "name": "Pec fly", "sets": 3, "reps": "8", "weight": "25/20/15 kg" },
+            { "name": "Addome", "sets": null, "reps": null, "weight": "", "note": "Esercizi vari" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Mercoledì",
+          "date": "2025-02-12",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "7", "weight": "25 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "10 kg per lato" },
+            { "name": "French press", "sets": 3, "reps": "10", "weight": "5 kg per lato" },
+            { "name": "Laterali", "sets": 3, "reps": "8", "weight": "10 kg per lato" },
+            { "name": "Bici", "sets": 3, "reps": "8", "weight": "10/8/6 kg" }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "label": "Sabato",
+          "date": "2025-02-14",
+          "exercises": [
+            { "name": "Military Press", "sets": 5, "reps": "7", "weight": "5 kg per lato" },
+            { "name": "Lento", "sets": 3, "reps": "12", "weight": "10 kg" },
+            { "name": "Lat machine", "sets": 3, "reps": "8", "weight": "35/30/25 kg" },
+            { "name": "Circuito core", "sets": 3, "reps": null, "weight": "", "note": "esercizi da Fabien" }
+          ]
+        }
+      ]
+    },
+    {
+      "weekNumber": 3,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Martedì",
+          "date": "2025-02-18",
+          "exercises": [
+            { "name": "Panca", "sets": 5, "reps": "6", "weight": "15 kg per lato" },
+            { "name": "Spinte", "sets": 3, "reps": "10/12", "weight": "14 kg per lato" },
+            { "name": "T bar", "sets": 3, "reps": "12", "weight": "22.5 kg" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "8", "weight": "10/8/6 kg" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Giovedì",
+          "date": "2025-02-20",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "6", "weight": "25 kg per lato" },
+            { "name": "Sagomato", "sets": 3, "reps": "10", "weight": "7 kg per lato" },
+            { "name": "Upper alle corde", "sets": 3, "reps": "10", "weight": "25 kg" },
+            { "name": "Push", "sets": 3, "reps": "8", "weight": "25/22/20 kg" },
+            { "name": "Affondi", "sets": 3, "reps": "10", "weight": "15 kg per lato" }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Sabato",
+          "date": "2025-02-22",
+          "exercises": [
+            { "name": "Rematore sotto", "sets": 5, "reps": "6", "weight": "12 kg per lato" },
+            { "name": "Low row", "sets": 3, "reps": "12", "weight": "18 kg" },
+            { "name": "Dip", "sets": 2, "reps": "fino a 8", "weight": "" },
+            { "name": "Pec fly", "sets": 3, "reps": "8", "weight": "25/20/15 kg" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Martedì",
+          "date": "2025-02-26",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "6", "weight": "35 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "15 kg per lato" },
+            { "name": "French press", "sets": 3, "reps": "10", "weight": "7 kg per lato" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "10", "weight": "10 kg" },
+            { "name": "Curl", "sets": 3, "reps": "8", "weight": "12/8/6 kg" }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "label": "Sabato",
+          "date": "2025-03-01",
+          "exercises": [
+            { "name": "Military Press", "sets": 5, "reps": "7", "weight": "6.25 kg per lato" },
+            { "name": "Lento", "sets": 3, "reps": "12", "weight": "12.5 kg", "note": "alzare a 12.5 kg" },
+            { "name": "Lat machine", "sets": 3, "reps": "8", "weight": "40/35/30 kg" },
+            { "name": "Core", "sets": null, "reps": null, "weight": "", "note": "Esercizi da Fabien" }
+          ]
+        }
+      ]
+    },
+    {
+      "weekNumber": 4,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Martedì",
+          "date": "2025-03-04",
+          "exercises": [
+            { "name": "Panca", "sets": 5, "reps": "5", "weight": "18.75 kg per lato" },
+            { "name": "Spinte", "sets": 3, "reps": "12", "weight": "15 kg" },
+            { "name": "T bar", "sets": 3, "reps": "12", "weight": "22.5 kg" },
+            { "name": "Alzate al cavo", "sets": 3, "reps": "8", "weight": "22/20/17 kg" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Mercoledì",
+          "date": "2025-03-05",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "5", "weight": "30 kg per lato" },
+            { "name": "Scott", "sets": 3, "reps": "12", "weight": "7 kg", "note": "provare 8 kg" },
+            { "name": "Upper", "sets": 3, "reps": "12", "weight": "30 kg" },
+            { "name": "Push down", "sets": 3, "reps": "8", "weight": "25/22/20 kg" },
+            { "name": "Affondi", "sets": 3, "reps": "10", "weight": "15 kg per lato" }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Giovedì",
+          "date": "2025-03-06",
+          "exercises": [
+            { "name": "Rematore sotto", "sets": 3, "reps": "5", "weight": "13 kg per lato" },
+            { "name": "Low row", "sets": 3, "reps": "12", "weight": "18 kg per lato" },
+            { "name": "Dip", "sets": 2, "reps": "6", "weight": "" },
+            { "name": "Pec fly", "sets": 3, "reps": "8", "weight": "25/20/15 kg" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Giovedì",
+          "date": "2025-03-13",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "5", "weight": "40 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "15 kg per lato" },
+            { "name": "French press", "sets": 3, "reps": "10", "weight": "7 kg per lato" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "10", "weight": "10 kg" },
+            { "name": "Curl", "sets": 3, "reps": "8", "weight": "12/8/6 kg" }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "label": "Sabato",
+          "date": "2025-03-15",
+          "exercises": [
+            { "name": "Military Press", "sets": 5, "reps": "5", "weight": "7.5 kg per lato" },
+            { "name": "Lento", "sets": 3, "reps": "12", "weight": "12.5 kg", "note": "provare a salire" },
+            { "name": "Lat machine", "sets": 3, "reps": "8", "weight": "45/40/35 kg" },
+            { "name": "Core", "sets": null, "reps": null, "weight": "", "note": "Esercizi da Fabien" }
+          ]
+        }
+      ]
+    },
+    {
+      "weekNumber": 5,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Sabato",
+          "date": "2025-03-15",
+          "exercises": [
+            { "name": "Panca", "sets": 5, "reps": "5", "weight": "20 kg per lato" },
+            { "name": "Spinte", "sets": 3, "reps": "10", "weight": "16 kg" },
+            { "name": "Rematore", "sets": 3, "reps": "12", "weight": "22.5 kg" },
+            { "name": "Alzate al cavo", "sets": 3, "reps": "8", "weight": "22/20/17 kg" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Martedì",
+          "date": "2025-03-19",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "5", "weight": "35 kg per lato" },
+            { "name": "Scott", "sets": 3, "reps": "10", "weight": "8 kg" },
+            { "name": "Upper", "sets": 3, "reps": "12", "weight": "35 kg" },
+            { "name": "Push", "sets": 3, "reps": "8", "weight": "30/25/20 kg" },
+            { "name": "Affondi", "sets": 3, "reps": "10", "weight": "15 kg per lato" }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Venerdì",
+          "date": "2025-03-21",
+          "exercises": [
+            { "name": "Rematore", "sets": 5, "reps": "5", "weight": "15 kg" },
+            { "name": "Low row", "sets": 3, "reps": "10", "weight": "20 kg" },
+            { "name": "Dip", "sets": 3, "reps": "12", "weight": "" },
+            { "name": "Pec fly", "sets": 3, "reps": "8", "weight": "25/20/15 kg" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Martedì",
+          "date": "2025-03-25",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "5", "weight": "42.5 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "12.5 kg" },
+            { "name": "French press", "sets": 3, "reps": "11", "weight": "8 kg" },
+            { "name": "Curl al cavo", "sets": 3, "reps": "8", "weight": "27/25/20 kg" }
+          ]
+        },
+        {
+          "dayNumber": 5,
+          "label": "Mercoledì",
+          "date": "2025-03-26",
+          "exercises": [
+            { "name": "Military Press", "sets": 5, "reps": "5", "weight": "8.75 kg per lato" },
+            { "name": "Lento", "sets": 3, "reps": "12", "weight": "14 kg", "note": "provare 15 kg" },
+            { "name": "Lat machine", "sets": 3, "reps": "8", "weight": "45/40/35 kg" }
+          ]
+        }
+      ]
+    },
+    {
+      "weekNumber": 6,
+      "days": [
+        {
+          "dayNumber": 1,
+          "label": "Sabato",
+          "date": "2025-03-29",
+          "exercises": [
+            { "name": "Panca", "sets": 5, "reps": "5", "weight": "21.25 kg per lato" },
+            { "name": "Spinte", "sets": 3, "reps": "8", "weight": "17.5 kg" },
+            { "name": "Rematore bilanciere normale", "sets": 3, "reps": "10", "weight": "15 kg" },
+            { "name": "Alzate frontali", "sets": 3, "reps": "8", "weight": "25/20/17 kg" }
+          ]
+        },
+        {
+          "dayNumber": 2,
+          "label": "Martedì",
+          "date": "2025-04-02",
+          "exercises": [
+            { "name": "Squat", "sets": 5, "reps": "5", "weight": "35 kg", "note": "provare 37.4 kg" },
+            { "name": "Curl", "sets": 3, "reps": "8", "weight": "8 kg" },
+            { "name": "Upper", "sets": 3, "reps": "12", "weight": "20 kg" },
+            { "name": "Push", "sets": 3, "reps": "8", "weight": "30/25/20 kg" }
+          ]
+        },
+        {
+          "dayNumber": 3,
+          "label": "Giovedì",
+          "date": "2025-04-04",
+          "exercises": [
+            { "name": "Rematore sotto", "sets": 5, "reps": "5", "weight": "17 kg" },
+            { "name": "Low row", "sets": 3, "reps": "12", "weight": "20 kg" },
+            { "name": "Dip", "sets": null, "reps": "fino a 7", "weight": "" },
+            { "name": "Pec fly", "sets": 3, "reps": "8", "weight": "30/25/20 kg" }
+          ]
+        },
+        {
+          "dayNumber": 4,
+          "label": "Venerdì",
+          "date": "2025-04-05",
+          "exercises": [
+            { "name": "Stacco", "sets": 5, "reps": "5", "weight": "42.5 kg per lato" },
+            { "name": "Romeno", "sets": 3, "reps": "10", "weight": "15 kg" },
+            { "name": "French press", "sets": 3, "reps": "10", "weight": "8 kg" },
+            { "name": "Laterali", "sets": 3, "reps": "10", "weight": "10 kg" },
+            { "name": "Curl al cavo", "sets": 3, "reps": "8", "weight": "30/25/20 kg" }
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Anno non specificato: usato 2025 per tutte le date.",
+    "Giorno della settimana usato come label; il dayNumber segue l'ordine di apparizione per settimana.",
+    "Esercizi con set/rep mancanti riportano null e nota esplicativa.",
+    "Voci tipo 'Peso finale' salvate come dayNotes.",
+    "Note tra parentesi (es. esercizio con elastico, provare peso diverso) mappate nel campo note dell'esercizio."
+  ]
+}

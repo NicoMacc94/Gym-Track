@@ -33,4 +33,5 @@
   - Aggiornamento legge da `/api/plans` con fallback ai mock, salva rep/peso e label giorno via API (messaggi di fallback se backend assente).
   - Storico tenta `GET /api/logs` con fallback ai dati mock, mostra banner di stato.
 - TODO-DB già popolati per auth, provider prod, connessioni/pooling, audit/logging.
+- Backend-only aggiunto: campo `scheduledDate` sui giorni e campo `note` sugli esercizi; UI front per note da implementare in un passaggio successivo (da tracciare nei TODO se necessario).
 - Test eseguiti: `cd web && npm run lint`.

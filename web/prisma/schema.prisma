@@ -51,6 +51,7 @@ model PlanExercise {
   name       String
   targetSets String
   targetReps String
+  note       String?   @db.Text
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   deletedAt  DateTime?

@@ -8,6 +8,7 @@ const exerciseInputSchema = z.object({
   name: z.string().min(1),
   targetSets: z.string().min(1),
   targetReps: z.string().min(1),
+  note: z.string().optional(),
 });
 
 const dayInputSchema = z.object({
@@ -58,6 +59,7 @@ export const serializePlan = (plan: PlanWithRelations) => ({
         name: ex.name,
         targetSets: ex.targetSets,
         targetReps: ex.targetReps,
+        note: ex.note ?? "",
         weeks: ex.weekEntries
           .sort(
             (
@@ -145,6 +147,7 @@ export async function POST(request: NextRequest) {
                 name: ex.name,
                 targetSets: ex.targetSets,
                 targetReps: ex.targetReps,
+                note: ex.note,
                 weekEntries: {
                   create: Array.from({ length: data.weeksCount }, (_, i) => ({
                     weekNumber: i + 1,
