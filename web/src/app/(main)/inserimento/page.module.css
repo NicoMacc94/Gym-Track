@@ -8,23 +8,20 @@
   --error: #b91c1c;
   --success: #16a34a;
 
-  min-height: 100vh;
-  padding: 48px 16px 64px;
-  background: radial-gradient(circle at 12% 18%, #e0f2fe 0, transparent 22%),
-    radial-gradient(circle at 85% 0%, #f1f5f9 0, transparent 18%),
-    var(--background);
   display: flex;
   justify-content: center;
+  padding: 8px 0 32px;
+  color: var(--text-primary);
 }
 
 .card {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1180px;
   background: var(--card);
   border-radius: 16px;
-  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
-  border: 1px solid var(--border);
-  padding: 48px;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+  padding: 36px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -38,10 +35,10 @@
 }
 
 .eyebrow {
-  font-size: 14px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--accent);
 }
 
@@ -54,13 +51,9 @@
 
 .lead {
   color: var(--text-secondary);
-  line-height: 1.6;
-  max-width: 760px;
-}
-
-.legend {
-  color: var(--text-secondary);
-  font-size: 14px;
+  line-height: 1.7;
+  max-width: 780px;
+  text-wrap: balance;
 }
 
 .required {
@@ -84,7 +77,44 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
+}
+
+.section {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 18px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.sectionEyebrow {
+  margin-top: 2px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 82px;
+}
+
+.sectionTitle {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sectionLead {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-top: 4px;
 }
 
 .fieldGrid {
@@ -107,7 +137,7 @@
 
 .input {
   width: 100%;
-  border: 1px solid var(--border);
+  border: 1px solid #d9e0ea;
   border-radius: 10px;
   padding: 12px;
   background: #f8fafc;
@@ -116,16 +146,11 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.input:focus {
+.input:focus-visible {
   outline: none;
-  border-color: rgba(14, 165, 233, 0.6);
+  border-color: rgba(14, 165, 233, 0.65);
   background: #fff;
   box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
-}
-
-.textarea {
-  resize: vertical;
-  min-height: 120px;
 }
 
 .hint {
@@ -135,13 +160,13 @@
 
 .buttonGroup {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  gap: 10px;
 }
 
 .chipButton {
-  border: 1px solid var(--border);
-  background: #f8fafc;
+  border: 1px solid #d9e0ea;
+  background: #ffffff;
   color: var(--text-primary);
   border-radius: 10px;
   padding: 10px 12px;
@@ -152,7 +177,7 @@
 }
 
 .chipButton:hover {
-  border-color: rgba(14, 165, 233, 0.6);
+  border-color: rgba(14, 165, 233, 0.7);
   box-shadow: 0 8px 18px rgba(14, 165, 233, 0.15);
 }
 
@@ -160,29 +185,105 @@
   transform: translateY(1px);
 }
 
+.chipButton:focus-visible {
+  outline: none;
+  border-color: rgba(14, 165, 233, 0.9);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
 .chipActive {
   background: linear-gradient(135deg, rgba(14, 165, 233, 0.12), #fff);
-  border-color: rgba(14, 165, 233, 0.8);
+  border-color: rgba(14, 165, 233, 0.85);
   box-shadow: 0 8px 18px rgba(14, 165, 233, 0.2);
 }
 
-.sliderRow {
+.daySelector {
   display: flex;
-  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.dayCard {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.dayHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.dayKicker {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.dayMeta {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: 4px;
+  max-width: 520px;
+}
+
+.dayActions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.ghostButton {
+  border: 1px dashed #cbd5e1;
+  background: #fff;
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.ghostButton:hover {
+  border-color: rgba(14, 165, 233, 0.7);
+  background: #f8fafc;
+}
+
+.ghostButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  border-style: solid;
+}
+
+.exerciseList {
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
-.slider {
-  flex: 1;
-  accent-color: var(--accent);
+.exerciseRow {
+  border: 1px dashed #d9e0ea;
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
 }
 
-.sliderValue {
-  min-width: 48px;
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-primary);
-  font-weight: 600;
+.exerciseRow .ghostButton {
+  justify-self: start;
+  margin-top: 18px;
 }
 
 .error {
@@ -196,7 +297,7 @@
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .primaryButton {
@@ -219,6 +320,14 @@
   transform: translateY(1px);
 }
 
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.ghostButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  border-color: rgba(14, 165, 233, 0.7);
+}
+
 .secondaryButton {
   border: 1px solid var(--border);
   background: #fff;
@@ -235,12 +344,33 @@
   background: #f8fafc;
 }
 
+.secondaryButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .card {
-    padding: 32px 20px;
+    padding: 28px 18px;
   }
 
   .title {
     font-size: 26px;
+  }
+
+  .section {
+    padding: 16px;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+  }
+
+  .dayHeader {
+    flex-direction: column;
+  }
+
+  .dayActions {
+    justify-content: flex-start;
   }
 }

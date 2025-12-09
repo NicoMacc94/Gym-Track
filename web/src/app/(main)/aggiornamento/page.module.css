@@ -1,0 +1,330 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #0f172a;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0ea5e9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.lead {
+  font-size: 16px;
+  color: #334155;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.cardOpen {
+  border-color: #0ea5e9;
+  box-shadow: 0 14px 38px rgba(14, 165, 233, 0.16);
+}
+
+.cardHeader {
+  width: 100%;
+  padding: 18px 20px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cardHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cardEyebrow {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.cardTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #0f172a;
+  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  font-size: 13px;
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  border-right: 2px solid #0f172a;
+  border-bottom: 2px solid #0f172a;
+  transform: rotate(-45deg);
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(135deg);
+}
+
+.cardBody {
+  padding: 0 20px 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.daySection {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dayHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dayHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dayEyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0ea5e9;
+  letter-spacing: 0.01em;
+}
+
+.dayTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.dayTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.dayNameInput {
+  min-width: 220px;
+  max-width: 320px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.dayNameInput::placeholder {
+  color: #94a3b8;
+}
+
+.dayNameInput:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+.dayBadge {
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: #e0f2fe;
+  color: #0b5686;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tableShell {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  overflow-x: auto;
+  box-shadow: inset 0 1px 0 rgba(148, 163, 184, 0.18);
+}
+
+.tableGrid {
+  display: grid;
+  gap: 10px;
+  align-items: stretch;
+  width: 100%;
+  min-width: 620px;
+}
+
+.cell {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.headerCell {
+  background: linear-gradient(180deg, #f8fafc, #eef2ff);
+  border-color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.weekLabel {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.exerciseCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(180deg, #ffffff, #f8fafc);
+}
+
+.exerciseName {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.exerciseMeta {
+  font-size: 13px;
+  color: #475569;
+}
+
+.weekCell {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  align-items: start;
+}
+
+.inlineField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.inputLabel {
+  font-size: 10px;
+  color: #475569;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 6px 7px;
+  font-size: 12px;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+}
+
+@media (max-width: 1024px) {
+  .cardHeader {
+    align-items: flex-start;
+  }
+
+  .tableGrid {
+    min-width: 520px;
+  }
+
+  .weekCell {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .title {
+    font-size: 24px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .badgeRow {
+    gap: 6px;
+  }
+
+  .dayHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tableShell {
+    padding: 10px;
+  }
+}
