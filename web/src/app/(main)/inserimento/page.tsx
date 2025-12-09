@@ -195,6 +195,20 @@ export default function NewPlanPage() {
       return;
     }
 
+    const hasEmptyExercise = days.some((day) =>
+      day.exercises.some(
+        (exercise) =>
+          exercise.name.trim().length === 0 ||
+          exercise.sets.trim().length === 0 ||
+          exercise.reps.trim().length === 0,
+      ),
+    );
+    if (hasEmptyExercise) {
+      setSubmitStatus("error");
+      setSubmitMessage("Compila nome, serie e ripetizioni per tutti gli esercizi.");
+      return;
+    }
+
     setSubmitStatus("loading");
     setSubmitMessage(null);
 
@@ -224,7 +238,11 @@ export default function NewPlanPage() {
 
       if (!response.ok) {
         const errorBody = await response.json().catch(() => ({}));
-        throw new Error(errorBody.error || "Impossibile salvare la scheda");
+        const message =
+          typeof errorBody.error === "string"
+            ? errorBody.error
+            : "Impossibile salvare la scheda";
+        throw new Error(message);
       }
 
       const data = await response.json();

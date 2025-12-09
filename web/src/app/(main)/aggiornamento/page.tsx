@@ -349,6 +349,7 @@ export default function AggiornamentoPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [modal, setModal] = useState<ModalState | null>(null);
+  const [backendAvailable, setBackendAvailable] = useState(false);
 
   const normalizePlan = useCallback((plan: TrainingPlan): TrainingPlan => {
     return {
@@ -397,6 +398,7 @@ export default function AggiornamentoPage() {
           setRawPlans(initialPlans);
           setStatusMessage("Nessuna scheda trovata nel backend, uso il mock locale.");
           setOpenPlanId(initialPlans[0]?.id ?? null);
+          setBackendAvailable(false);
         } else {
           const normalized = apiPlans.map(normalizePlan);
           setRawPlans(normalized);
@@ -405,12 +407,14 @@ export default function AggiornamentoPage() {
             normalized[0]?.id ??
             null;
           setOpenPlanId(nextOpenId);
+          setBackendAvailable(true);
         }
       } catch (error) {
         console.error("Errore caricamento schede", error);
         setRawPlans(initialPlans);
         setOpenPlanId(initialPlans[0]?.id ?? null);
         setStatusMessage("Backend non raggiungibile, uso il mock locale.");
+        setBackendAvailable(false);
       } finally {
         setLoading(false);
       }
@@ -564,11 +568,19 @@ export default function AggiornamentoPage() {
   };
 
   const toggleEditMode = (planId: string) => {
+    if (!backendAvailable) {
+      setStatusMessage("Abilita il backend per usare le azioni di modifica.");
+      return;
+    }
     setEditingPlanId((current) => (current === planId ? null : planId));
     setStatusMessage(null);
   };
 
   const handleDeletePlan = (planId: string, planName: string) => {
+    if (!backendAvailable) {
+      setStatusMessage("Elimina scheda disponibile solo con backend attivo.");
+      return;
+    }
     setModal({
       title: "Elimina scheda",
       body: `Confermi l'eliminazione della scheda "${planName}"? L'operazione è definitiva.`,
@@ -600,6 +612,10 @@ export default function AggiornamentoPage() {
   };
 
   const handleAddDay = async (planId: string) => {
+    if (!backendAvailable) {
+      setStatusMessage("Aggiungi giorno disponibile solo con backend attivo.");
+      return;
+    }
     setActionLoading(true);
     try {
       const response = await fetch(`/api/plans/${planId}/days`, {
@@ -625,6 +641,10 @@ export default function AggiornamentoPage() {
   };
 
   const handleDeleteDay = (planId: string, dayId: string, label?: string) => {
+    if (!backendAvailable) {
+      setStatusMessage("Elimina giorno disponibile solo con backend attivo.");
+      return;
+    }
     setModal({
       title: "Elimina giorno",
       body: `Vuoi eliminare il giorno "${label || "Senza titolo"}"? Tutti gli esercizi e le settimane associate saranno rimossi.`,
@@ -656,6 +676,10 @@ export default function AggiornamentoPage() {
   };
 
   const handleAdjustWeeks = (planId: string, action: "add" | "remove") => {
+    if (!backendAvailable) {
+      setStatusMessage("Gestione settimane disponibile solo con backend attivo.");
+      return;
+    }
     const isRemove = action === "remove";
     setModal({
       title: isRemove ? "Rimuovi settimana" : "Aggiungi settimana",
@@ -702,6 +726,10 @@ export default function AggiornamentoPage() {
     targetDayId: string,
   ) => {
     if (fromDayId === targetDayId) return;
+    if (!backendAvailable) {
+      setStatusMessage("Spostamento esercizi disponibile solo con backend attivo.");
+      return;
+    }
     setActionLoading(true);
     try {
       const response = await fetch(
@@ -784,6 +812,10 @@ export default function AggiornamentoPage() {
   };
 
   const persistExerciseMeta = async (planId: string, dayId: string, exerciseId: string) => {
+    if (!backendAvailable) {
+      setStatusMessage("Aggiornamento esercizio disponibile solo con backend attivo.");
+      return;
+    }
     const plan = plans.find((p) => p.id === planId);
     const day = plan?.days.find((d) => d.id === dayId);
     const exercise = day?.exercises.find((ex) => ex.id === exerciseId);
@@ -871,12 +903,16 @@ export default function AggiornamentoPage() {
                         type="button"
                         className={styles.secondaryButton}
                         onClick={() => toggleEditMode(plan.id)}
+                        disabled={!backendAvailable}
                       >
                         {isEditing ? "Chiudi modifica" : "Modifica"}
                       </button>
                       <p className={styles.toolbarHint}>
                         Le settimane sono condivise per tutta la scheda; le azioni di modifica
                         qui sotto influiscono su tutti i giorni.
+                        {!backendAvailable
+                          ? " Attiva il backend per usare le azioni di modifica."
+                          : ""}
                       </p>
                     </div>
                     {isEditing ? (
