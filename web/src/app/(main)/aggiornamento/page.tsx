@@ -627,14 +627,21 @@ export default function AggiornamentoPage() {
         body: JSON.stringify({}),
       });
       if (!response.ok) {
-        throw new Error("Errore aggiunta giorno");
+        const body = await response.json().catch(() => ({}));
+        const message =
+          typeof body.error === "string"
+            ? body.error
+            : "Errore aggiunta giorno. Verifica che il backend sia attivo.";
+        setStatusMessage(message);
+        return;
       }
       await loadPlans({ keepOpenId: planId });
       setEditingPlanId(planId);
       setStatusMessage("Nuovo giorno aggiunto.");
     } catch (error) {
       console.error("Add day error", error);
-      setStatusMessage("Aggiunta giorno non riuscita. Controlla la connessione.");
+      setStatusMessage("Aggiunta giorno non riuscita. Controlla la connessione/backend.");
+      setBackendAvailable(false);
     } finally {
       setActionLoading(false);
     }
@@ -702,7 +709,13 @@ export default function AggiornamentoPage() {
             body: JSON.stringify({ action }),
           });
           if (!response.ok) {
-            throw new Error("Errore aggiornamento settimane");
+            const body = await response.json().catch(() => ({}));
+            const message =
+              typeof body.error === "string"
+                ? body.error
+                : "Errore aggiornamento settimane. Verifica che il backend sia attivo.";
+            setStatusMessage(message);
+            return;
           }
           await loadPlans({ keepOpenId: planId });
           setEditingPlanId(planId);
@@ -711,7 +724,8 @@ export default function AggiornamentoPage() {
           );
         } catch (error) {
           console.error("Adjust weeks error", error);
-          setStatusMessage("Operazione settimane non riuscita.");
+          setStatusMessage("Operazione settimane non riuscita. Controlla la connessione/backend.");
+          setBackendAvailable(false);
         } finally {
           setActionLoading(false);
         }
@@ -846,6 +860,7 @@ export default function AggiornamentoPage() {
     } catch (error) {
       console.error("Persist exercise error", error);
       setStatusMessage("Aggiornamento esercizio non riuscito.");
+      setBackendAvailable(false);
     } finally {
       setActionLoading(false);
     }
@@ -897,6 +912,21 @@ export default function AggiornamentoPage() {
 
               {isOpen ? (
                 <div className={styles.cardBody} id={`plan-${plan.id}`}>
+                  <div className={styles.planActions}>
+                    <button
+                      type="button"
+                      className={styles.dangerButton}
+                      onClick={() => handleDeletePlan(plan.id, plan.name)}
+                      disabled={!backendAvailable || actionLoading}
+                    >
+                      Elimina scheda
+                    </button>
+                    {!backendAvailable ? (
+                      <span className={styles.muted}>
+                        Attiva il backend per eliminare o modificare la scheda.
+                      </span>
+                    ) : null}
+                  </div>
                   <div className={styles.planToolbar}>
                     <div className={styles.toolbarLeft}>
                       <button
