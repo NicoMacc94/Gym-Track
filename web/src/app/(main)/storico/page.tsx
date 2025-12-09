@@ -10,7 +10,7 @@ type WorkoutEntry = {
   data: string;
   esercizio: string;
   serie: number;
-  ripetizioni: number;
+  ripetizioni: string;
   peso?: number;
   rpe?: number;
   note?: string;
@@ -65,7 +65,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-01",
     esercizio: "Squat",
     serie: 1,
-    ripetizioni: 5,
+    ripetizioni: "5",
     peso: 120,
     rpe: 4,
     note: "Avvio blocco forza, buona velocità.",
@@ -77,7 +77,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-01",
     esercizio: "Squat",
     serie: 2,
-    ripetizioni: 5,
+    ripetizioni: "5",
     peso: 120,
     rpe: 4,
   },
@@ -88,7 +88,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-01",
     esercizio: "Panca piana",
     serie: 1,
-    ripetizioni: 6,
+    ripetizioni: "6",
     peso: 85,
     rpe: 3,
   },
@@ -99,7 +99,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-03",
     esercizio: "Stacco da terra",
     serie: 1,
-    ripetizioni: 4,
+    ripetizioni: "4",
     peso: 150,
     rpe: 4,
     note: "Grip ok, pausa lunga.",
@@ -111,7 +111,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-03",
     esercizio: "Rematore bilanciere",
     serie: 1,
-    ripetizioni: 8,
+    ripetizioni: "8",
     peso: 60,
     rpe: 3,
   },
@@ -122,7 +122,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-05",
     esercizio: "Lat machine",
     serie: 1,
-    ripetizioni: 10,
+    ripetizioni: "10",
     peso: 50,
     rpe: 2,
     note: "Focus tecnica.",
@@ -134,7 +134,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-05",
     esercizio: "Lat machine",
     serie: 2,
-    ripetizioni: 10,
+    ripetizioni: "10",
     peso: 50,
     rpe: 3,
   },
@@ -145,7 +145,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-07",
     esercizio: "Panca inclinata",
     serie: 1,
-    ripetizioni: 12,
+    ripetizioni: "12",
     peso: 60,
     rpe: 3,
     note: "Ottimo pump.",
@@ -157,7 +157,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-08",
     esercizio: "Squat",
     serie: 1,
-    ripetizioni: 5,
+    ripetizioni: "5",
     peso: 90,
     rpe: 2,
     note: "Deload controllato.",
@@ -169,7 +169,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-08",
     esercizio: "Military press",
     serie: 1,
-    ripetizioni: 8,
+    ripetizioni: "8",
     peso: 40,
   },
   {
@@ -179,7 +179,7 @@ const mockWorkoutEntries: WorkoutEntry[] = [
     data: "2025-12-10",
     esercizio: "Panca piana",
     serie: 1,
-    ripetizioni: 5,
+    ripetizioni: "5",
     peso: 90,
     rpe: 4,
     note: "Progressione mantenuta.",
@@ -235,8 +235,9 @@ const sortValue = (entry: WorkoutEntry, key: SortKey): string | number => {
     case "settimana":
     case "giorno":
     case "serie":
-    case "ripetizioni":
       return entry[key];
+    case "ripetizioni":
+      return parseFloat(entry.ripetizioni) || 0;
     case "peso":
       return entry.peso ?? -Infinity;
     case "rpe":
@@ -274,6 +275,8 @@ export default function StoricoPage() {
     key: "data",
     direction: "desc",
   });
+  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -306,7 +309,7 @@ export default function StoricoPage() {
             data: date,
             esercizio: log.exerciseName ?? log.esercizio ?? "Esercizio",
             serie: Number(log.setNumber ?? 1),
-            ripetizioni: Number(log.reps ?? 0),
+            ripetizioni: String(log.reps ?? ""),
             peso: weight,
             rpe,
             note: log.note,
@@ -339,6 +342,15 @@ export default function StoricoPage() {
     () => sortEntries(filteredEntries, sortConfig),
     [filteredEntries, sortConfig],
   );
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters, sortConfig, entries]);
+
+  const totalPages = Math.max(1, Math.ceil(sortedEntries.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * pageSize;
+  const pagedEntries = sortedEntries.slice(startIndex, startIndex + pageSize);
 
   const activeFilters = useMemo(
     () => Object.values(filters).filter(Boolean).length,
@@ -560,9 +572,53 @@ export default function StoricoPage() {
             </div>
           </div>
 
+          <div className={styles.paginationBar}>
+            <div className={styles.field} style={{ flex: "0 0 220px" }}>
+              <label className={styles.label} htmlFor="pageSize">
+                Righe per pagina
+              </label>
+              <select
+                id="pageSize"
+                className={styles.select}
+                value={pageSize}
+                onChange={(event) => {
+                  setPageSize(Number(event.target.value));
+                  setPage(1);
+                }}
+              >
+                {[20, 30, 50, 70].map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.pageControls}>
+              <button
+                type="button"
+                className={styles.pageButton}
+                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+              >
+                Precedente
+              </button>
+              <span className={styles.pageInfo}>
+                Pagina {currentPage} di {totalPages}
+              </span>
+              <button
+                type="button"
+                className={styles.pageButton}
+                onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+              >
+                Successiva
+              </button>
+            </div>
+          </div>
+
           <div className={styles.summaryRow}>
             <p className={styles.summary}>
-              Mostro {sortedEntries.length} di {entries.length} log
+              Mostro {pagedEntries.length} di {sortedEntries.length} log
               {activeFilters > 0 ? ` (filtri attivi: ${activeFilters})` : " (nessun filtro)"}
             </p>
           </div>
@@ -676,7 +732,7 @@ export default function StoricoPage() {
                 </tr>
               </thead>
               <tbody>
-                {sortedEntries.map((entry, index) => (
+                {pagedEntries.map((entry, index) => (
                   <tr key={`${entry.data}-${entry.scheda}-${entry.esercizio}-${entry.serie}-${index}`}>
                     <td>
                       <div className={styles.cellPrimary}>{formatDate(entry.data)}</div>
@@ -693,7 +749,11 @@ export default function StoricoPage() {
                       <div className={styles.cellPrimary}>{entry.esercizio}</div>
                     </td>
                     <td className={styles.numeric}>#{entry.serie}</td>
-                    <td className={styles.numeric}>{entry.ripetizioni}</td>
+                    <td className={styles.numeric}>
+                      {entry.ripetizioni && entry.ripetizioni.trim() !== ""
+                        ? entry.ripetizioni
+                        : "—"}
+                    </td>
                     <td className={styles.numeric}>
                       {entry.peso === undefined ? "—" : `${entry.peso} kg`}
                     </td>
