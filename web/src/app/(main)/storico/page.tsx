@@ -263,6 +263,8 @@ const sortEntries = (entries: WorkoutEntry[], sort: SortConfig) => {
   return sorted;
 };
 
+const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
+
 export default function StoricoPage() {
   const [entries, setEntries] = useState<WorkoutEntry[]>(mockWorkoutEntries);
   const [loading, setLoading] = useState(true);
@@ -279,7 +281,7 @@ export default function StoricoPage() {
       setStatusMessage(null);
       try {
         const response = await fetch("/api/logs", {
-          headers: { "x-user-id": "dev-user" },
+          headers: { "x-user-id": defaultUserId },
         });
         if (!response.ok) {
           throw new Error("Impossibile recuperare i log dal backend");

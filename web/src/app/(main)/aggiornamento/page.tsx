@@ -329,6 +329,7 @@ const getTotalExercises = (plan: TrainingPlan) =>
   plan.days.reduce((count, day) => count + day.exercises.length, 0);
 
 export default function AggiornamentoPage() {
+  const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
   const [plans, setPlans] = useState<TrainingPlan[]>(initialPlans);
   const [openPlanId, setOpenPlanId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -368,7 +369,7 @@ export default function AggiornamentoPage() {
       try {
         const response = await fetch("/api/plans", {
           headers: {
-            "x-user-id": "dev-user",
+            "x-user-id": defaultUserId,
           },
         });
         if (!response.ok) {
@@ -396,7 +397,7 @@ export default function AggiornamentoPage() {
     };
 
     fetchPlans();
-  }, []);
+  }, [defaultUserId]);
 
   const togglePlan = (planId: string) => {
     setOpenPlanId((current) => (current === planId ? null : planId));
@@ -415,7 +416,7 @@ export default function AggiornamentoPage() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            "x-user-id": "dev-user",
+            "x-user-id": defaultUserId,
           },
           body: JSON.stringify({
             reps: data.reps ?? "",
@@ -491,7 +492,7 @@ export default function AggiornamentoPage() {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            "x-user-id": "dev-user",
+            "x-user-id": defaultUserId,
           },
           body: JSON.stringify({ label, scheduledDate }),
         });

@@ -25,6 +25,8 @@ type FormErrors = {
   name?: string;
 };
 
+const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
+
 const createExercise = (id: string): ExerciseForm => ({
   id,
   name: "",
@@ -210,7 +212,7 @@ export default function NewPlanPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-user-id": "dev-user",
+          "x-user-id": defaultUserId,
         },
         body: JSON.stringify(payload),
       });
