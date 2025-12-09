@@ -1,0 +1,222 @@
+{
+  "nome": "Scheda Fase 3 (vuota)",
+  "giorni": [
+    {
+      "giorno": 1,
+      "esercizi": [
+        {
+          "nome": "Panca piana",
+          "serie": 5,
+          "ripetizioni": "5",
+          "recupero": "2'+",
+          "obiettivo": "Incremento carico",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Spinte su panca 45 deg",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Rematore bilancere",
+          "serie": 3,
+          "ripetizioni": "10/12",
+          "recupero": "1'30",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Alzate frontali",
+          "serie": 3,
+          "ripetizioni": "8+8+8",
+          "recupero": "1'",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Stacco tecnico",
+          "serie": 4,
+          "ripetizioni": "6",
+          "recupero": "1'",
+          "obiettivo": "50%",
+          "settimane": [null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "giorno": 2,
+      "esercizi": [
+        {
+          "nome": "Squat",
+          "serie": 5,
+          "ripetizioni": "5",
+          "recupero": "2'+",
+          "obiettivo": "Incremento carico",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Panca Scott bicipiti",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Upper back",
+          "serie": 3,
+          "ripetizioni": "10/12",
+          "recupero": "1'30\"",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Push down corda",
+          "serie": 3,
+          "ripetizioni": "8+8+8",
+          "recupero": "1'",
+          "obiettivo": "50%",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Bulgarian squat",
+          "serie": 3,
+          "ripetizioni": "10 x lato",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "giorno": 3,
+      "esercizi": [
+        {
+          "nome": "Rematore sotto panca",
+          "serie": 5,
+          "ripetizioni": "5",
+          "recupero": "2'+",
+          "obiettivo": "Incremento carico",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Low row",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Dip",
+          "serie": "N",
+          "ripetizioni": "1/1",
+          "recupero": "30\"/2'",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Croci",
+          "serie": 3,
+          "ripetizioni": "8+8+8",
+          "recupero": "2'",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Squat tecnico",
+          "serie": 3,
+          "ripetizioni": "6",
+          "recupero": "1'",
+          "obiettivo": "50%",
+          "settimane": [null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "giorno": 4,
+      "esercizi": [
+        {
+          "nome": "Stacco",
+          "serie": 5,
+          "ripetizioni": "5",
+          "recupero": "2'+",
+          "obiettivo": "Incremento carico",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Stacco romeno",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "French press sagomato",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Alzate laterali",
+          "serie": 3,
+          "ripetizioni": "10/12",
+          "recupero": "1'30\"",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Curl bicipi",
+          "serie": 3,
+          "ripetizioni": "8+8+8",
+          "recupero": "1'",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        }
+      ]
+    },
+    {
+      "giorno": 5,
+      "esercizi": [
+        {
+          "nome": "Military press",
+          "serie": 5,
+          "ripetizioni": "5",
+          "recupero": "2'+",
+          "obiettivo": "Incremento carico",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Lento avanti 75 deg",
+          "serie": 3,
+          "ripetizioni": "10",
+          "recupero": "1'30\"",
+          "obiettivo": "Test 12 rep",
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Lat machine",
+          "serie": 3,
+          "ripetizioni": "8+8+8",
+          "recupero": "1'",
+          "obiettivo": null,
+          "settimane": [null, null, null, null, null, null]
+        },
+        {
+          "nome": "Panca tecnica",
+          "serie": 4,
+          "ripetizioni": "6",
+          "recupero": "1'",
+          "obiettivo": "50%",
+          "settimane": [null, null, null, null, null, null]
+        }
+      ]
+    }
+  ]
+}

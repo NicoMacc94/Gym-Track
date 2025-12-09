@@ -26,13 +26,15 @@
 - Definito schema MySQL in `web/prisma/schema.prisma` con modelli per users (placeholder), plans, days, exercises, week targets/entries, workout logs, timestamp e soft delete dove sensato.
 - Creato Prisma client condiviso `web/src/lib/prisma.ts` e helper utente placeholder `web/src/lib/current-user.ts` (header `x-user-id` o `DEFAULT_USER_ID`).
 - API REST:
-  - `POST/GET /api/plans`, `GET /api/plans/:id`, `PATCH /plans/:id/days/:dayId`, `PUT /plans/:id/exercises/:exerciseId/weeks/:weekNumber`.
+  - `POST/GET /api/plans`, `GET /api/plans/:id`.
+  - Mutazioni struttura: `POST /plans/:id/days` (crea giorno), `PATCH/DELETE /plans/:id/days/:dayId` (rename/elimina), `PATCH /plans/:id/weeks` (add/remove ultima settimana), `POST /plans/:id/exercises/:exerciseId/move` (sposta esercizio su un altro giorno), `PATCH /plans/:id/exercises/:exerciseId` (rename + target + note), `DELETE /plans/:id` (elimina scheda).
+  - Valori settimanali: `PUT /plans/:id/exercises/:exerciseId/weeks/:weekNumber`.
   - `GET/POST /api/logs` per lo storico per-set.
 - Frontend:
-  - Inserimento ora invia `POST /api/plans` (fallback messaggi di errore/successo).
-  - Aggiornamento legge da `/api/plans` con fallback ai mock, salva rep/peso e label giorno via API (messaggi di fallback se backend assente).
-  - Storico tenta `GET /api/logs` con fallback ai dati mock, mostra banner di stato.
+  - Inserimento invia `POST /api/plans` con modal di successo e reset del form.
+  - Aggiornamento: carica da `/api/plans` (fallback mock solo se vuoto/down), salva rep/peso, label giorno e data, permette rename esercizi + note, sposta esercizi, aggiunge/rimuove settimane e giorni, elimina scheda/giorni con modali; tutte le azioni collegate alle nuove API.
+  - Storico legge da `/api/logs` con paginazione lato client (page size configurabile) e fallback mock.
 - TODO-DB già popolati per auth, provider prod, connessioni/pooling, audit/logging.
-- Backend-only aggiunto: campo `scheduledDate` sui giorni e campo `note` sugli esercizi; UI front per note da implementare in un passaggio successivo (da tracciare nei TODO se necessario).
+- Campi aggiuntivi: `scheduledDate` sui giorni e `note` sugli esercizi (gestiti lato UI e API). Settimane/dati per esercizio ora sono coerenti con il numero di settimane della scheda, anche dopo add/remove.
 - Seed: `node scripts/seed-plan.js` importa `data/PALE-4-scheda-fase-3-p-min-esp.json`, normalizzando i pesi ai soli numeri (es. “10 kg per lato” → `10`, “10/7.5/5 kg” → `10/7.5/5`), con note ed esercizi distribuiti su giorni/settimane; creati week entries e log base.
 - Test eseguiti: `cd web && npm run lint`.

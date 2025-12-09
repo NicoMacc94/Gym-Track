@@ -66,3 +66,46 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string; dayId: string } },
+) {
+  const userId = getUserId(request);
+  const planId = params.id;
+  const dayId = params.dayId;
+
+  try {
+    const day = await prisma.planDay.findFirst({
+      where: { id: dayId, planId, deletedAt: null, plan: { userId, deletedAt: null } },
+    });
+
+    if (!day) {
+      return NextResponse.json({ error: "Giorno non trovato" }, { status: 404 });
+    }
+
+    const remainingDays = await prisma.planDay.findMany({
+      where: { planId, id: { not: dayId }, deletedAt: null },
+      orderBy: { orderIndex: "asc" },
+      select: { id: true },
+    });
+
+    await prisma.$transaction([
+      prisma.planDay.delete({ where: { id: dayId } }),
+      ...remainingDays.map((d, index) =>
+        prisma.planDay.update({
+          where: { id: d.id },
+          data: { orderIndex: index },
+        }),
+      ),
+    ]);
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("DELETE /plans/:id/days/:dayId error", error);
+    return NextResponse.json(
+      { error: "Errore durante l'eliminazione del giorno" },
+      { status: 500 },
+    );
+  }
+}

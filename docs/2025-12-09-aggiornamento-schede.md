@@ -18,11 +18,10 @@
 - `web/src/app/(main)/_components/Sidebar.tsx` (+ CSS se necessario) per aggiungere la voce di navigazione.
 
 ## Implementation
-- Creata la nuova route `/aggiornamento` con dati mock tipizzati: schede con settimane, giorni ed esercizi; card espandibili (una aperta per volta) e grid per settimane con campi editabili di ripetizioni/peso per ogni esercizio. La stringa sotto l’esercizio ora mostra “x” come separatore e le colonne settimana non hanno più l’helper “Ripetizioni · Peso”.
-- Styling dedicato in `web/src/app/(main)/aggiornamento/page.module.css` per card, sezioni giorno e tabella settimanale con scroll controllato su mobile; campi rep/peso affiancati con label ellissate, input compatti e griglia interna `minmax(0,1fr)` per adattarsi allo spazio (anche con 8 settimane) senza uscire dalle card.
-- Sidebar aggiornata con voce “Aggiornamento” e testo descrittivo allineato alla nuova sezione.
-- Persistenza locale: i valori inseriti vengono salvati in `localStorage` (`aggiornamento-plans`) e ripristinati al ritorno sulla pagina, in attesa di un DB reale. Assunzione: persistenza locale è sufficiente per ora e non confligge con il futuro storage server-side.
-- Aggiunta la possibilità di rinominare ogni giorno direttamente in `/aggiornamento` (input vicino al titolo del giorno), così non tocchiamo il payload critico di `/inserimento`. L’etichetta viene salvata in `localStorage` e ora ha contrasto esplicito.
-- Plan di esempio esteso a 8 settimane per verificare la resa con molte colonne; griglia e input ridotti per restare leggibili con scroll orizzontale. Storage versionato (`aggiornamento-plans-v2`) per forzare il caricamento del nuovo mock da 8 settimane.
-- Assunzione: per semplificare la lettura, si apre una sola card alla volta; basta ritoccare lo stato per consentire aperture multiple se servirà.
+- `/aggiornamento` ora carica le schede dal backend (`/api/plans` con header `x-user-id`) con fallback al mock solo se il DB è vuoto o non raggiungibile. Una card aperta alla volta, header con meta (settimane/giorni/esercizi) e griglia settimanale per rep/peso.
+- Aggiunto “modo modifica” per ogni scheda con toolbar contestuale: aggiunta/rimozione settimana (colonna condivisa a tutta la scheda), aggiunta giorno, eliminazione scheda (modal di conferma). Le settimane rimosse cancellano l’ultima colonna di dati, le settimane aggiunte creano slot vuoti per tutti gli esercizi.
+- Azioni per giorno ed esercizio in modifica: eliminazione giorno (modal), rinomina giorno e data allenamento (salvate via `PATCH /plans/:id/days/:dayId`), spostamento esercizi tra giorni (`POST /plans/:id/exercises/:exerciseId/move`), rename target esercizio (nome, serie, target reps, note) con `PATCH /plans/:id/exercises/:exerciseId`. Note: il campo note è gestito lato backend, la UI lo espone come input semplice.
+- Input rep/peso compatti e label ellissate per gestire fino a 8 settimane senza uscire dalle card; griglia `minmax(0,1fr)` per i campi settimana, card e contenuti allargati con padding per non sovrapporsi alla Sidebar.
+- Modali leggere per azioni distruttive (elimina scheda, elimina giorno, aggiungi/rimuovi settimana) e banner di stato per feedback rapido. I pulsanti disabilitano le azioni durante le chiamate API.
+- CSS aggiornato in `web/src/app/(main)/aggiornamento/page.module.css` per toolbar, bottoni primari/secondari/danger, modali e controlli di spostamento esercizi.
 - Test: `cd web && npm run lint`.

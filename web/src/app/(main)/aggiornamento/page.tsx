@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 type WeekValues = {
+  weekNumber?: number;
   reps: string;
   weight: string;
 };
@@ -11,8 +12,9 @@ type WeekValues = {
 type ExercisePlan = {
   id: string;
   name: string;
-  targetSets: number;
+  targetSets: string;
   targetReps: string;
+  note?: string;
   weeks: WeekValues[];
 };
 
@@ -31,6 +33,15 @@ type TrainingPlan = {
   days: DayPlan[];
 };
 
+type ModalState = {
+  title: string;
+  body: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  variant?: "danger" | "primary";
+  onConfirm: () => void;
+};
+
 const initialPlans: TrainingPlan[] = [
   {
     id: "plan-1",
@@ -46,7 +57,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "squat",
             name: "Squat bilanciere",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "5",
             weeks: [
               { reps: "5", weight: "120" },
@@ -62,7 +73,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "bench",
             name: "Panca piana",
-            targetSets: 4,
+            targetSets: "4",
             targetReps: "6",
             weeks: [
               { reps: "6", weight: "85" },
@@ -78,7 +89,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "row",
             name: "Rematore bilanciere",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "8",
             weeks: [
               { reps: "8", weight: "60" },
@@ -100,7 +111,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "ohp",
             name: "Military press",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "8",
             weeks: [
               { reps: "8", weight: "45" },
@@ -116,7 +127,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "dips",
             name: "Dip parallele",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "10",
             weeks: [
               { reps: "10", weight: "bodyweight" },
@@ -132,7 +143,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "laterals",
             name: "Alzate laterali",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "15",
             weeks: [
               { reps: "15", weight: "8" },
@@ -155,7 +166,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "rdl",
             name: "Stacco rumeno",
-            targetSets: 4,
+            targetSets: "4",
             targetReps: "8",
             weeks: [
               { reps: "8", weight: "100" },
@@ -171,7 +182,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "lunges",
             name: "Affondi manubri",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "10",
             weeks: [
               { reps: "10", weight: "20" },
@@ -187,7 +198,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "core",
             name: "Plank",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "45s",
             weeks: [
               { reps: "45s", weight: "" },
@@ -218,7 +229,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "incline",
             name: "Panca inclinata",
-            targetSets: 4,
+            targetSets: "4",
             targetReps: "8-10",
             weeks: [
               { reps: "10", weight: "60" },
@@ -228,7 +239,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "lat",
             name: "Lat machine",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "12",
             weeks: [
               { reps: "12", weight: "50" },
@@ -238,7 +249,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "curl",
             name: "Curl bilanciere",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "10",
             weeks: [
               { reps: "10", weight: "30" },
@@ -255,7 +266,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "legpress",
             name: "Leg press",
-            targetSets: 4,
+            targetSets: "4",
             targetReps: "12",
             weeks: [
               { reps: "12", weight: "180" },
@@ -265,7 +276,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "legcurl",
             name: "Leg curl",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "12-15",
             weeks: [
               { reps: "12", weight: "45" },
@@ -275,7 +286,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "calf",
             name: "Calf raise",
-            targetSets: 4,
+            targetSets: "4",
             targetReps: "15",
             weeks: [
               { reps: "15", weight: "60" },
@@ -292,7 +303,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "row-machine",
             name: "Rematore macchina",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "10",
             weeks: [
               { reps: "10", weight: "55" },
@@ -302,7 +313,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "pullup",
             name: "Trazioni",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "max",
             weeks: [
               { reps: "8", weight: "bodyweight" },
@@ -312,7 +323,7 @@ const initialPlans: TrainingPlan[] = [
           {
             id: "triceps",
             name: "Pushdown cavo",
-            targetSets: 3,
+            targetSets: "3",
             targetReps: "12",
             weeks: [
               { reps: "12", weight: "35" },
@@ -333,10 +344,13 @@ export default function AggiornamentoPage() {
   const [rawPlans, setRawPlans] = useState<TrainingPlan[]>(initialPlans);
   const [plans, setPlans] = useState<TrainingPlan[]>(initialPlans);
   const [openPlanId, setOpenPlanId] = useState<string | null>(null);
+  const [editingPlanId, setEditingPlanId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [modal, setModal] = useState<ModalState | null>(null);
 
-  const normalizePlan = (plan: TrainingPlan): TrainingPlan => {
+  const normalizePlan = useCallback((plan: TrainingPlan): TrainingPlan => {
     return {
       ...plan,
       days: plan.days.map((day) => ({
@@ -361,10 +375,11 @@ export default function AggiornamentoPage() {
         }),
       })),
     };
-  };
+  }, []);
 
-  useEffect(() => {
-    const fetchPlans = async () => {
+  const loadPlans = useCallback(
+    async (options?: { keepOpenId?: string | null }) => {
+      const keepOpenId = options?.keepOpenId ?? null;
       setLoading(true);
       setStatusMessage(null);
       try {
@@ -385,7 +400,11 @@ export default function AggiornamentoPage() {
         } else {
           const normalized = apiPlans.map(normalizePlan);
           setRawPlans(normalized);
-          setOpenPlanId(normalized[0]?.id ?? null);
+          const nextOpenId =
+            (keepOpenId && normalized.find((plan) => plan.id === keepOpenId)?.id) ??
+            normalized[0]?.id ??
+            null;
+          setOpenPlanId(nextOpenId);
         }
       } catch (error) {
         console.error("Errore caricamento schede", error);
@@ -395,10 +414,19 @@ export default function AggiornamentoPage() {
       } finally {
         setLoading(false);
       }
-    };
+    },
+    [defaultUserId, normalizePlan],
+  );
 
-    fetchPlans();
-  }, [defaultUserId]);
+  useEffect(() => {
+    void loadPlans();
+  }, [loadPlans]);
+
+  useEffect(() => {
+    if (editingPlanId && editingPlanId !== openPlanId) {
+      setEditingPlanId(null);
+    }
+  }, [editingPlanId, openPlanId]);
 
   useEffect(() => {
     const aggregatePlan = (plan: TrainingPlan): TrainingPlan => {
@@ -410,6 +438,7 @@ export default function AggiornamentoPage() {
             weeks: Array.from({ length: plan.weeks }, (_, i) => {
               const match = exercise.weeks?.find((w) => w.weekNumber === i + 1);
               return {
+                weekNumber: i + 1,
                 reps: match?.reps ?? "",
                 weight: match?.weight ?? "",
               };
@@ -534,6 +563,262 @@ export default function AggiornamentoPage() {
     })();
   };
 
+  const toggleEditMode = (planId: string) => {
+    setEditingPlanId((current) => (current === planId ? null : planId));
+    setStatusMessage(null);
+  };
+
+  const handleDeletePlan = (planId: string, planName: string) => {
+    setModal({
+      title: "Elimina scheda",
+      body: `Confermi l'eliminazione della scheda "${planName}"? L'operazione è definitiva.`,
+      confirmLabel: "Elimina",
+      cancelLabel: "Annulla",
+      variant: "danger",
+      onConfirm: async () => {
+        setModal(null);
+        setActionLoading(true);
+        try {
+          const response = await fetch(`/api/plans/${planId}`, {
+            method: "DELETE",
+            headers: { "x-user-id": defaultUserId },
+          });
+          if (!response.ok) {
+            throw new Error("Errore eliminazione scheda");
+          }
+          await loadPlans();
+          setEditingPlanId(null);
+          setStatusMessage("Scheda eliminata.");
+        } catch (error) {
+          console.error("Delete plan error", error);
+          setStatusMessage("Eliminazione non riuscita. Riprova.");
+        } finally {
+          setActionLoading(false);
+        }
+      },
+    });
+  };
+
+  const handleAddDay = async (planId: string) => {
+    setActionLoading(true);
+    try {
+      const response = await fetch(`/api/plans/${planId}/days`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": defaultUserId,
+        },
+        body: JSON.stringify({}),
+      });
+      if (!response.ok) {
+        throw new Error("Errore aggiunta giorno");
+      }
+      await loadPlans({ keepOpenId: planId });
+      setEditingPlanId(planId);
+      setStatusMessage("Nuovo giorno aggiunto.");
+    } catch (error) {
+      console.error("Add day error", error);
+      setStatusMessage("Aggiunta giorno non riuscita. Controlla la connessione.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDeleteDay = (planId: string, dayId: string, label?: string) => {
+    setModal({
+      title: "Elimina giorno",
+      body: `Vuoi eliminare il giorno "${label || "Senza titolo"}"? Tutti gli esercizi e le settimane associate saranno rimossi.`,
+      confirmLabel: "Elimina giorno",
+      cancelLabel: "Annulla",
+      variant: "danger",
+      onConfirm: async () => {
+        setModal(null);
+        setActionLoading(true);
+        try {
+          const response = await fetch(`/api/plans/${planId}/days/${dayId}`, {
+            method: "DELETE",
+            headers: { "x-user-id": defaultUserId },
+          });
+          if (!response.ok) {
+            throw new Error("Errore eliminazione giorno");
+          }
+          await loadPlans({ keepOpenId: planId });
+          setEditingPlanId(planId);
+          setStatusMessage("Giorno eliminato.");
+        } catch (error) {
+          console.error("Delete day error", error);
+          setStatusMessage("Eliminazione del giorno non riuscita.");
+        } finally {
+          setActionLoading(false);
+        }
+      },
+    });
+  };
+
+  const handleAdjustWeeks = (planId: string, action: "add" | "remove") => {
+    const isRemove = action === "remove";
+    setModal({
+      title: isRemove ? "Rimuovi settimana" : "Aggiungi settimana",
+      body: isRemove
+        ? "Rimuoveremo l'ultima settimana per tutte le colonne. I dati di quell'ultima settimana verranno eliminati."
+        : "Aggiungeremo una nuova settimana vuota per tutti gli esercizi.",
+      confirmLabel: isRemove ? "Rimuovi" : "Aggiungi",
+      cancelLabel: "Annulla",
+      variant: isRemove ? "danger" : "primary",
+      onConfirm: async () => {
+        setModal(null);
+        setActionLoading(true);
+        try {
+          const response = await fetch(`/api/plans/${planId}/weeks`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "x-user-id": defaultUserId,
+            },
+            body: JSON.stringify({ action }),
+          });
+          if (!response.ok) {
+            throw new Error("Errore aggiornamento settimane");
+          }
+          await loadPlans({ keepOpenId: planId });
+          setEditingPlanId(planId);
+          setStatusMessage(
+            isRemove ? "Ultima settimana rimossa." : "Nuova settimana aggiunta.",
+          );
+        } catch (error) {
+          console.error("Adjust weeks error", error);
+          setStatusMessage("Operazione settimane non riuscita.");
+        } finally {
+          setActionLoading(false);
+        }
+      },
+    });
+  };
+
+  const handleMoveExercise = async (
+    planId: string,
+    fromDayId: string,
+    exerciseId: string,
+    targetDayId: string,
+  ) => {
+    if (fromDayId === targetDayId) return;
+    setActionLoading(true);
+    try {
+      const response = await fetch(
+        `/api/plans/${planId}/exercises/${exerciseId}/move`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-user-id": defaultUserId,
+          },
+          body: JSON.stringify({ targetDayId }),
+        },
+      );
+      if (!response.ok) {
+        throw new Error("Errore spostamento esercizio");
+      }
+
+      setPlans((prev) =>
+        prev.map((plan) => {
+          if (plan.id !== planId) return plan;
+          const sourceDay = plan.days.find((day) => day.id === fromDayId);
+          const movedExercise =
+            sourceDay?.exercises.find((ex) => ex.id === exerciseId) ?? null;
+          if (!movedExercise) {
+            return plan;
+          }
+          return {
+            ...plan,
+            days: plan.days.map((day) => {
+              if (day.id === fromDayId) {
+                return {
+                  ...day,
+                  exercises: day.exercises.filter((ex) => ex.id !== exerciseId),
+                };
+              }
+              if (day.id === targetDayId) {
+                return { ...day, exercises: [...day.exercises, movedExercise] };
+              }
+              return day;
+            }),
+          };
+        }),
+      );
+
+      await loadPlans({ keepOpenId: planId });
+      setEditingPlanId(planId);
+      setStatusMessage("Esercizio spostato.");
+    } catch (error) {
+      console.error("Move exercise error", error);
+      setStatusMessage("Spostamento non riuscito. Riprova.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const updateExerciseMeta = (
+    planId: string,
+    dayId: string,
+    exerciseId: string,
+    field: "name" | "targetSets" | "targetReps" | "note",
+    value: string,
+  ) => {
+    setPlans((prev) =>
+      prev.map((plan) => {
+        if (plan.id !== planId) return plan;
+        return {
+          ...plan,
+          days: plan.days.map((day) => {
+            if (day.id !== dayId) return day;
+            return {
+              ...day,
+              exercises: day.exercises.map((exercise) =>
+                exercise.id === exerciseId ? { ...exercise, [field]: value } : exercise,
+              ),
+            };
+          }),
+        };
+      }),
+    );
+  };
+
+  const persistExerciseMeta = async (planId: string, dayId: string, exerciseId: string) => {
+    const plan = plans.find((p) => p.id === planId);
+    const day = plan?.days.find((d) => d.id === dayId);
+    const exercise = day?.exercises.find((ex) => ex.id === exerciseId);
+    if (!exercise) {
+      setStatusMessage("Esercizio non trovato.");
+      return;
+    }
+
+    setActionLoading(true);
+    try {
+      const response = await fetch(`/api/plans/${planId}/exercises/${exerciseId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": defaultUserId,
+        },
+        body: JSON.stringify({
+          name: exercise.name,
+          targetSets: exercise.targetSets,
+          targetReps: exercise.targetReps,
+          note: exercise.note ?? "",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Errore aggiornamento esercizio");
+      }
+      setStatusMessage("Esercizio aggiornato.");
+    } catch (error) {
+      console.error("Persist exercise error", error);
+      setStatusMessage("Aggiornamento esercizio non riuscito.");
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -551,6 +836,7 @@ export default function AggiornamentoPage() {
       <div className={styles.cardList}>
         {plans.map((plan) => {
           const isOpen = openPlanId === plan.id;
+          const isEditing = editingPlanId === plan.id;
           const weekNumbers = Array.from({ length: plan.weeks }, (_, index) => index + 1);
 
           return (
@@ -579,6 +865,58 @@ export default function AggiornamentoPage() {
 
               {isOpen ? (
                 <div className={styles.cardBody} id={`plan-${plan.id}`}>
+                  <div className={styles.planToolbar}>
+                    <div className={styles.toolbarLeft}>
+                      <button
+                        type="button"
+                        className={styles.secondaryButton}
+                        onClick={() => toggleEditMode(plan.id)}
+                      >
+                        {isEditing ? "Chiudi modifica" : "Modifica"}
+                      </button>
+                      <p className={styles.toolbarHint}>
+                        Le settimane sono condivise per tutta la scheda; le azioni di modifica
+                        qui sotto influiscono su tutti i giorni.
+                      </p>
+                    </div>
+                    {isEditing ? (
+                      <div className={styles.toolbarActions}>
+                        <button
+                          type="button"
+                          className={styles.primaryButton}
+                          onClick={() => handleAddDay(plan.id)}
+                          disabled={actionLoading}
+                        >
+                          + Giorno
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.primaryButton}
+                          onClick={() => handleAdjustWeeks(plan.id, "add")}
+                          disabled={actionLoading}
+                        >
+                          + Settimana
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.secondaryButton}
+                          onClick={() => handleAdjustWeeks(plan.id, "remove")}
+                          disabled={actionLoading || plan.weeks <= 1}
+                        >
+                          - Settimana
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.dangerButton}
+                          onClick={() => handleDeletePlan(plan.id, plan.name)}
+                          disabled={actionLoading}
+                        >
+                          Elimina scheda
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+
                   {plan.days.map((day, dayIndex) => (
                     <section key={day.id} className={styles.daySection}>
                       <div className={styles.dayHeader}>
@@ -608,9 +946,21 @@ export default function AggiornamentoPage() {
                             </div>
                           </div>
                         </div>
-                        <span className={styles.dayBadge}>
-                          {day.exercises.length} esercizi
-                        </span>
+                        <div className={styles.dayMeta}>
+                          <span className={styles.dayBadge}>
+                            {day.exercises.length} esercizi
+                          </span>
+                          {isEditing ? (
+                            <button
+                              type="button"
+                              className={styles.textButton}
+                              onClick={() => handleDeleteDay(plan.id, day.id, day.label)}
+                              disabled={actionLoading}
+                            >
+                              Elimina giorno
+                            </button>
+                          ) : null}
+                        </div>
                       </div>
 
                       <div className={styles.tableShell}>
@@ -642,10 +992,117 @@ export default function AggiornamentoPage() {
                             }}
                           >
                             <div className={`${styles.cell} ${styles.exerciseCell}`}>
-                              <p className={styles.exerciseName}>{exercise.name}</p>
-                              <p className={styles.exerciseMeta}>
-                                {exercise.targetSets} serie x target {exercise.targetReps} reps
-                              </p>
+                              {isEditing ? (
+                                <>
+                                  <div className={styles.exerciseEditRow}>
+                                    <input
+                                      className={styles.exerciseNameInput}
+                                      value={exercise.name}
+                                      onChange={(event) =>
+                                        updateExerciseMeta(
+                                          plan.id,
+                                          day.id,
+                                          exercise.id,
+                                          "name",
+                                          event.target.value,
+                                        )
+                                      }
+                                      placeholder="Nome esercizio"
+                                    />
+                                    <div className={styles.metaInputs}>
+                                      <label className={styles.metaLabel}>Serie</label>
+                                      <input
+                                        className={styles.metaInput}
+                                        value={exercise.targetSets}
+                                        onChange={(event) =>
+                                          updateExerciseMeta(
+                                            plan.id,
+                                            day.id,
+                                            exercise.id,
+                                            "targetSets",
+                                            event.target.value,
+                                          )
+                                        }
+                                      />
+                                      <label className={styles.metaLabel}>Target rep</label>
+                                      <input
+                                        className={styles.metaInput}
+                                        value={exercise.targetReps}
+                                        onChange={(event) =>
+                                          updateExerciseMeta(
+                                            plan.id,
+                                            day.id,
+                                            exercise.id,
+                                            "targetReps",
+                                            event.target.value,
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className={styles.exerciseNote}>
+                                    <input
+                                      className={styles.noteInput}
+                                      value={exercise.note ?? ""}
+                                      onChange={(event) =>
+                                        updateExerciseMeta(
+                                          plan.id,
+                                          day.id,
+                                          exercise.id,
+                                          "note",
+                                          event.target.value,
+                                        )
+                                      }
+                                      placeholder="Note (opzionali, solo backend per ora)"
+                                    />
+                                  </div>
+                                  <div className={styles.exerciseActions}>
+                                    <div className={styles.moveControl}>
+                                      {plan.days.length > 1 ? (
+                                        <>
+                                          <label className={styles.metaLabel}>Sposta in</label>
+                                          <select
+                                            value={day.id}
+                                            onChange={(event) =>
+                                              handleMoveExercise(
+                                                plan.id,
+                                                day.id,
+                                                exercise.id,
+                                                event.target.value,
+                                              )
+                                            }
+                                            className={styles.select}
+                                            disabled={actionLoading}
+                                          >
+                                            {plan.days.map((candidate, index) => (
+                                              <option key={candidate.id} value={candidate.id}>
+                                                {candidate.label || `Giorno ${index + 1}`}
+                                              </option>
+                                            ))}
+                                          </select>
+                                        </>
+                                      ) : (
+                                        <span className={styles.muted}>Solo un giorno presente</span>
+                                      )}
+                                    </div>
+                                    <button
+                                      type="button"
+                                      className={styles.primaryButton}
+                                      onClick={() => persistExerciseMeta(plan.id, day.id, exercise.id)}
+                                      disabled={actionLoading}
+                                    >
+                                      Salva esercizio
+                                    </button>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <p className={styles.exerciseName}>{exercise.name}</p>
+                                  <p className={styles.exerciseMeta}>
+                                    {exercise.targetSets} serie x target {exercise.targetReps} reps
+                                  </p>
+                                </>
+                              )}
                             </div>
 
                             {exercise.weeks.map((weekValue, weekIndex) => (
@@ -719,6 +1176,33 @@ export default function AggiornamentoPage() {
           );
         })}
       </div>
+
+      {modal ? (
+        <div className={styles.modalOverlay} role="dialog" aria-modal="true">
+          <div className={styles.modal}>
+            <h3 className={styles.modalTitle}>{modal.title}</h3>
+            <p className={styles.modalBody}>{modal.body}</p>
+            <div className={styles.modalActions}>
+              <button
+                type="button"
+                className={styles.secondaryButton}
+                onClick={() => setModal(null)}
+              >
+                {modal.cancelLabel ?? "Annulla"}
+              </button>
+              <button
+                type="button"
+                className={
+                  modal.variant === "danger" ? styles.dangerButton : styles.primaryButton
+                }
+                onClick={modal.onConfirm}
+              >
+                {modal.confirmLabel ?? "Conferma"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

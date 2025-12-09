@@ -38,3 +38,33 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  const userId = getUserId(request);
+  const planId = params.id;
+
+  try {
+    const plan = await prisma.plan.findFirst({
+      where: { id: planId, userId, deletedAt: null },
+      select: { id: true },
+    });
+    if (!plan) {
+      return NextResponse.json({ error: "Scheda non trovata" }, { status: 404 });
+    }
+
+    await prisma.plan.delete({
+      where: { id: planId },
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("DELETE /plans/:id error", error);
+    return NextResponse.json(
+      { error: "Errore durante l'eliminazione della scheda" },
+      { status: 500 },
+    );
+  }
+}

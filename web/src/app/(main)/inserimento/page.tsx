@@ -26,6 +26,10 @@ type FormErrors = {
 };
 
 const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
+const defaultSuccessState = {
+  open: false,
+  message: "",
+};
 
 const createExercise = (id: string): ExerciseForm => ({
   id,
@@ -63,6 +67,7 @@ export default function NewPlanPage() {
     "idle",
   );
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const [successModal, setSuccessModal] = useState(defaultSuccessState);
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
 
   const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -225,6 +230,11 @@ export default function NewPlanPage() {
       const data = await response.json();
       setSubmitStatus("success");
       setSubmitMessage(`Scheda salvata: ${data.plan?.name ?? "creata"}.`);
+      setSuccessModal({ open: true, message: `Scheda salvata: ${data.plan?.name ?? "creata"}.` });
+      // reset form
+      setSchedule({ name: "", weeks: 1, days: 1 });
+      setDays([createInitialDay()]);
+      setSelectedDayIndex(0);
     } catch (error) {
       console.error("Errore salvataggio scheda", error);
       setSubmitStatus("error");
@@ -539,6 +549,21 @@ export default function NewPlanPage() {
           </div>
         </form>
       </div>
+      {successModal.open && (
+        <div className={styles.modalOverlay} role="dialog" aria-modal="true">
+          <div className={styles.modal}>
+            <p className={styles.modalTitle}>Scheda salvata</p>
+            <p className={styles.modalBody}>{successModal.message}</p>
+            <button
+              type="button"
+              className={styles.modalButton}
+              onClick={() => setSuccessModal(defaultSuccessState)}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
