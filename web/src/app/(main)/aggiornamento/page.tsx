@@ -20,8 +20,6 @@ type DayPlan = {
   id: string;
   label: string;
   scheduledDate?: string;
-  weekNumber?: number;
-  displayDay?: number;
   exercises: ExercisePlan[];
 };
 
@@ -404,23 +402,66 @@ export default function AggiornamentoPage() {
   }, [defaultUserId]);
 
   useEffect(() => {
-    const annotate = (plan: TrainingPlan): TrainingPlan => {
-      const weekDayCount = new Map<number, number>();
-      return {
-        ...plan,
-        days: plan.days.map((day, idx) => {
-          const entryWeek =
-            day.exercises[0]?.weeks?.find((w) => w.weekNumber)?.weekNumber ??
-            Math.floor(idx / daysPerWeek) + 1;
-          const count = weekDayCount.get(entryWeek) ?? 0;
-          const displayDay = (count % daysPerWeek) + 1;
-          weekDayCount.set(entryWeek, count + 1);
-          return { ...day, weekNumber: entryWeek, displayDay };
-        }),
-      };
+    const aggregatePlan = (plan: TrainingPlan): TrainingPlan => {
+      const aggregated = new Map<number, DayPlan>();
+
+      plan.days.forEach((day, idx) => {
+        const weekNumber = Math.floor(idx / daysPerWeek) + 1;
+        const displayDay = (idx % daysPerWeek) + 1;
+        const key = displayDay;
+        const current = aggregated.get(key);
+
+        if (!current) {
+          aggregated.set(key, {
+            id: `${plan.id}-day-${displayDay}`,
+            label: day.label || `Giorno ${displayDay}`,
+            scheduledDate: day.scheduledDate,
+            exercises: [],
+          });
+        }
+
+        const targetDay = aggregated.get(key)!;
+
+        day.exercises.forEach((exercise) => {
+          const exKey = exercise.name.trim().toLowerCase();
+          let aggEx = targetDay.exercises.find(
+            (ex) => ex.name.trim().toLowerCase() === exKey,
+          );
+
+          if (!aggEx) {
+            aggEx = {
+              id: `${exercise.id}-${displayDay}`,
+              name: exercise.name,
+              targetSets: exercise.targetSets,
+              targetReps: exercise.targetReps,
+              note: exercise.note,
+              weeks: Array.from({ length: plan.weeks }, () => ({
+                reps: "",
+                weight: "",
+              })),
+            };
+            targetDay.exercises.push(aggEx);
+          }
+
+          const weekEntries = exercise.weeks || [];
+          const matchWeekEntry =
+            weekEntries.find((w) => w.weekNumber === weekNumber) || weekEntries[0];
+
+          aggEx.weeks[weekNumber - 1] = {
+            reps: matchWeekEntry?.reps ?? "",
+            weight: matchWeekEntry?.weight ?? "",
+          };
+        });
+      });
+
+      const aggregatedDays = Array.from(aggregated.entries())
+        .sort(([a], [b]) => a - b)
+        .map(([, day]) => day);
+
+      return { ...plan, days: aggregatedDays };
     };
 
-    setPlans(rawPlans.map(annotate));
+    setPlans(rawPlans.map(aggregatePlan));
   }, [rawPlans, daysPerWeek]);
 
   const togglePlan = (planId: string) => {
@@ -596,10 +637,7 @@ export default function AggiornamentoPage() {
                     <section key={day.id} className={styles.daySection}>
                       <div className={styles.dayHeader}>
                         <div className={styles.dayHeading}>
-                          <p className={styles.dayEyebrow}>
-                            Sett {day.weekNumber ?? Math.floor(dayIndex / daysPerWeek) + 1} ·
-                            Giorno {day.displayDay ?? dayIndex + 1}
-                          </p>
+                          <p className={styles.dayEyebrow}>Giorno {dayIndex + 1}</p>
                           <div className={styles.dayTitleRow}>
                             <h3 className={styles.dayTitle}>Nome giorno</h3>
                             <div className={styles.dayInputs}>
