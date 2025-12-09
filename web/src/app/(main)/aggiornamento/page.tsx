@@ -330,7 +330,6 @@ const getTotalExercises = (plan: TrainingPlan) =>
 
 export default function AggiornamentoPage() {
   const defaultUserId = process.env.NEXT_PUBLIC_DEFAULT_USER_ID || "dev-user";
-  const [daysPerWeek, setDaysPerWeek] = useState(5);
   const [rawPlans, setRawPlans] = useState<TrainingPlan[]>(initialPlans);
   const [plans, setPlans] = useState<TrainingPlan[]>(initialPlans);
   const [openPlanId, setOpenPlanId] = useState<string | null>(null);
@@ -403,66 +402,30 @@ export default function AggiornamentoPage() {
 
   useEffect(() => {
     const aggregatePlan = (plan: TrainingPlan): TrainingPlan => {
-      const aggregated = new Map<number, DayPlan>();
-
-      plan.days.forEach((day, idx) => {
-        const weekNumber = Math.floor(idx / daysPerWeek) + 1;
-        const displayDay = (idx % daysPerWeek) + 1;
-        const key = displayDay;
-        const current = aggregated.get(key);
-
-        if (!current) {
-          aggregated.set(key, {
-            id: `${plan.id}-day-${displayDay}`,
-            label: day.label || `Giorno ${displayDay}`,
-            scheduledDate: day.scheduledDate,
-            exercises: [],
-          });
-        }
-
-        const targetDay = aggregated.get(key)!;
-
-        day.exercises.forEach((exercise) => {
-          const exKey = exercise.name.trim().toLowerCase();
-          let aggEx = targetDay.exercises.find(
-            (ex) => ex.name.trim().toLowerCase() === exKey,
-          );
-
-          if (!aggEx) {
-            aggEx = {
-              id: `${exercise.id}-${displayDay}`,
-              name: exercise.name,
-              targetSets: exercise.targetSets,
-              targetReps: exercise.targetReps,
-              note: exercise.note,
-              weeks: Array.from({ length: plan.weeks }, () => ({
-                reps: "",
-                weight: "",
-              })),
-            };
-            targetDay.exercises.push(aggEx);
-          }
-
-          const weekEntries = exercise.weeks || [];
-          const matchWeekEntry =
-            weekEntries.find((w) => w.weekNumber === weekNumber) || weekEntries[0];
-
-          aggEx.weeks[weekNumber - 1] = {
-            reps: matchWeekEntry?.reps ?? "",
-            weight: matchWeekEntry?.weight ?? "",
+      return {
+        ...plan,
+        days: plan.days.map((day, idx) => {
+          const exercises = day.exercises.map((exercise) => ({
+            ...exercise,
+            weeks: Array.from({ length: plan.weeks }, (_, i) => {
+              const match = exercise.weeks?.find((w) => w.weekNumber === i + 1);
+              return {
+                reps: match?.reps ?? "",
+                weight: match?.weight ?? "",
+              };
+            }),
+          }));
+          return {
+            ...day,
+            label: day.label || `Giorno ${idx + 1}`,
+            exercises,
           };
-        });
-      });
-
-      const aggregatedDays = Array.from(aggregated.entries())
-        .sort(([a], [b]) => a - b)
-        .map(([, day]) => day);
-
-      return { ...plan, days: aggregatedDays };
+        }),
+      };
     };
 
     setPlans(rawPlans.map(aggregatePlan));
-  }, [rawPlans, daysPerWeek]);
+  }, [rawPlans]);
 
   const togglePlan = (planId: string) => {
     setOpenPlanId((current) => (current === planId ? null : planId));
@@ -581,23 +544,6 @@ export default function AggiornamentoPage() {
           Compila ripetizioni e peso dove mancano o aggiorna i valori esistenti per tenere
           traccia dei carichi.
         </p>
-        <div className={styles.daysPerWeek}>
-          <label className={styles.daysPerWeekLabel} htmlFor="daysPerWeek">
-            Giorni per settimana (usato per raggruppare la vista)
-          </label>
-          <input
-            id="daysPerWeek"
-            type="number"
-            min={1}
-            max={7}
-            value={daysPerWeek}
-            onChange={(event) => {
-              const value = Number(event.target.value);
-              setDaysPerWeek(Math.min(7, Math.max(1, value || 1)));
-            }}
-            className={styles.daysPerWeekInput}
-          />
-        </div>
         {loading && <div className={styles.banner}>Caricamento schede...</div>}
         {!loading && statusMessage && <div className={styles.banner}>{statusMessage}</div>}
       </header>
